@@ -1,0 +1,95 @@
+#!/bin/zsh
+# music2spatial: any song → head-tracked Spatial Audio for AirPods, with its vocals, drums, bass
+# and other instruments placed around you.
+#
+# usage: music2spatial SONG [OUT.m4a] [options]
+#   --stems "AZ:EL:WIDTH:GAIN:ORBIT;…"   placement of vocals;drums;bass;other (see stem-render)
+#                                        default: on stage in front of you
+#   --stems-dir DIR      where the separated stems are kept (re-used next time)
+#   --separate-only      just separate (for the app's live player)
+#   --hrtf apple|FILE    head model for the binaural copy (default apple)
+#   --bitrate BPS        APAC bitrate (default 768000)
+#   --progress           machine-readable progress for the app
+#
+# The output has two tracks: Spatial Audio (APAC, ambisonics, head-tracked in QuickTime and Music)
+# and a binaural stereo copy that any player and any headphones can use.
+set -uo pipefail
+setopt local_options no_monitor
+
+ROOT=${0:A:h}
+BIN=$ROOT/bin
+FFMPEG=$([[ -x $BIN/ffmpeg ]] && print $BIN/ffmpeg || print ${commands[ffmpeg]:-/usr/local/bin/ffmpeg})
+FFPROBE=$([[ -x $BIN/ffprobe ]] && print $BIN/ffprobe || print ${commands[ffprobe]:-/usr/local/bin/ffprobe})
+SEPARATE=$([[ -f $ROOT/separate.py ]] && print $ROOT/separate.py || print $ROOT/tools/separate.py)
+PY=${SPATIALIZE_STEMS_PYTHON:-"$HOME/Library/Application Support/Spatialize/stems/bin/python"}
+
+PROGRESS=0
+die() { print -u2 "music2spatial: $*"; (( PROGRESS )) && print "@error $*"; exit 1; }
+stage() { print -u2 "▸ [$1] $2"; (( PROGRESS )) && print "@stage $1 $2"; }
+
+SONG="" OUT="" STEMS="0:6:20:1:0;0:30:70:1:0;-30:-4:25:1:0;34:8:90:1:0" STEMDIR="" ONLY=0 HRTF=apple BITRATE=768000
+while (( $# )); do
+  case $1 in
+    --stems) STEMS=$2; shift 2 ;;
+    --stems-dir) STEMDIR=$2; shift 2 ;;
+    --separate-only) ONLY=1; shift ;;
+    --hrtf) HRTF=$2; shift 2 ;;
+    --bitrate) BITRATE=$2; shift 2 ;;
+    --progress) PROGRESS=1; shift ;;
+    -h|--help) sed -n 2,18p $0 | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -*) die "unknown option $1" ;;
+    *) if [[ -z $SONG ]]; then SONG=$1; elif [[ -z $OUT ]]; then OUT=$1; else die "too many arguments"; fi; shift ;;
+  esac
+done
+[[ -n $SONG && -f $SONG ]] || die "song not found (see --help)"
+SONG=${SONG:A}
+[[ -n $OUT ]] || OUT=${SONG:r}.spatial.m4a
+OUT=${OUT:A}
+[[ -x $PY ]] || die "the separation engine isn't installed (Spatialize installs it on first use)"
+for t in $BIN/stem-render $BIN/apacenc $BIN/binaural $BIN/mux; do [[ -x $t ]] || die "missing $t (run ./build.sh)"; done
+
+# stems are kept per song (path, size, date), so changing the placement doesn't separate again
+if [[ -z $STEMDIR ]]; then
+  key=$(print -rn -- "$SONG|$(stat -f '%z|%m' "$SONG")" | /sbin/md5 -q | cut -c1-16)
+  [[ ${#key} == 16 ]] || die "couldn't name the stems folder"
+  STEMDIR=~/Library/Caches/Spatialize/stems/$key
+fi
+NAMES=(vocals drums bass other)
+have=1; for n in $NAMES; do [[ -s $STEMDIR/$n.wav ]] || have=0; done
+if (( ! have )); then
+  mkdir -p "$STEMDIR"
+  PATH=$BIN:$PATH "$PY" "$SEPARATE" "$SONG" "$STEMDIR" ${${PROGRESS:#0}:+--progress} || die "separation failed"
+  for n in $NAMES; do [[ -s $STEMDIR/$n.wav ]] || die "separation produced no $n"; done
+else
+  stage stems "Using the parts separated earlier"
+  (( PROGRESS )) && print "@progress stems 1"
+fi
+(( PROGRESS )) && print "@stems $STEMDIR"
+(( ONLY )) && { (( PROGRESS )) && print "@done $STEMDIR"; exit 0; }
+
+WORK=$(mktemp -d "${TMPDIR:-/tmp}/music2spatial.XXXXXX") || die "no temp folder"
+trap 'rm -rf "$WORK"' EXIT
+trap 'print -u2 "music2spatial: cancelled"; exit 130' TERM INT
+DUR=$($FFPROBE -v error -show_entries format=duration -of csv=p=0 "$STEMDIR/vocals.wav" | sed 's/,*$//')
+
+stems_f32() {  # the four stereo stems as one 8-channel 48 kHz stream: vocals, drums, bass, other
+  $FFMPEG -v error -nostdin -i "$STEMDIR/vocals.wav" -i "$STEMDIR/drums.wav" -i "$STEMDIR/bass.wav" -i "$STEMDIR/other.wav" \
+    -filter_complex "[0:a][1:a][2:a][3:a]amerge=inputs=4,aresample=48000" -f f32le -c:a pcm_f32le -
+}
+
+stage audio "Placing the instruments around you"
+# Spatial Audio: ambisonics → APAC (head-tracked by Apple's renderer)
+stems_f32 | $BIN/stem-render --stems "$STEMS" --out hoa \
+  | env A2A_DURATION=$DUR A2A_LANE=audio A2A_FROM=0 A2A_TO=1 A2A_PROGRESS=$PROGRESS $BIN/apacenc "$WORK/spatial.caf" 48000 $BITRATE hoa16 &
+SPID=$!
+# binaural copy for every other player
+stems_f32 | $BIN/stem-render --stems "$STEMS" --out 714 | $BIN/binaural --hrtf "$HRTF" 2>/dev/null \
+  | $FFMPEG -v error -nostdin -f f32le -ar 48000 -ch_layout stereo -i - -c:a aac_at -b:a 256k -y "$WORK/binaural.m4a" &
+BPID=$!
+wait $SPID || die "Spatial Audio encoding failed"
+wait $BPID || { print -u2 "binaural copy failed; continuing without it"; rm -f "$WORK/binaural.m4a"; }
+
+stage mux "Writing ${OUT:t}"
+COPY=(); [[ -s $WORK/binaural.m4a ]] && COPY=(--compat "$WORK/binaural.m4a" --compat-kind binaural)
+$BIN/mux --audio "$WORK/spatial.caf" $COPY --out "$OUT" --metadata-from "$SONG" || die "could not write ${OUT:t}"
+(( PROGRESS )) && print "@done $OUT" || print -- "$OUT"

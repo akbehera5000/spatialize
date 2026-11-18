@@ -8,7 +8,10 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            if let info = app.info {
+            if let music = app.music {
+                MusicStudio(session: music)
+                    .transition(.opacity.combined(with: .scale(scale: 0.98)))
+            } else if let info = app.info {
                 Editor(info: info, settings: app.settings, conversion: app.conversion)
                     .transition(.opacity.combined(with: .scale(scale: 0.98)))
             } else {
@@ -19,6 +22,7 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background { Backdrop(image: app.thumbnail) }
         .animation(.smooth(duration: 0.45), value: app.info?.url)
+        .animation(.smooth(duration: 0.45), value: app.music?.url)
         .dropDestination(for: URL.self) { urls, _ in
             guard !urls.isEmpty else { return false }
             app.open(urls)
@@ -108,9 +112,9 @@ struct EmptyState: View {
             .glassEffect(.regular, in: Circle())
 
             VStack(spacing: 8) {
-                Text(app.loading ? "Reading movie…" : "Drop a movie here")
+                Text(app.loading ? "Reading…" : "Drop a movie or a song here")
                     .font(.system(size: 30, weight: .bold))
-                Text("Dolby Atmos, TrueHD, Dolby Digital Plus or any MKV. Spatialize turns it into a\nQuickTime movie with Spatial Audio and head tracking for AirPods.")
+                Text("Movies with Dolby Atmos, TrueHD or Dolby Digital Plus become QuickTime movies with Spatial\nAudio and head tracking. Songs are split into vocals, drums, bass and instruments you place around you.")
                     .font(.system(size: 13.5))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -143,7 +147,7 @@ struct EmptyState: View {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
-        panel.message = "Choose a movie with Dolby audio"
+        panel.message = "Choose a movie with Dolby audio, or any song"
         if panel.runModal() == .OK, let url = panel.url { app.open(url) }
     }
 }

@@ -8,6 +8,8 @@ final class AppState: ObservableObject {
     static let shared = AppState()
 
     @Published var info: MediaInfo?
+    /// A song open in Music mode (3D music from any song).
+    @Published var music: MusicSession?
     @Published var thumbnail: NSImage?
     @Published var loading = false
     @Published var loadError: String?
@@ -100,7 +102,20 @@ final class AppState: ObservableObject {
         preview.state = .idle
         Task {
             do {
+                // a song (audio, no picture) opens in Music mode
+                let probed = try await MediaInfo.load(url, ffprobe: Engine.tool("ffprobe"))
+                if probed.video == nil && !probed.audio.isEmpty {
+                    let session = await MusicSession(url: url, duration: probed.duration)
+                    self.music?.close()
+                    self.info = nil
+                    self.thumbnail = nil
+                    self.music = session
+                    self.loading = false
+                    return
+                }
                 let info = try await Self.probe(url)
+                self.music?.close()
+                self.music = nil
                 self.info = info
                 let d = Self.defaults(for: info)
                 self.audioTrack = d.audio
@@ -144,6 +159,11 @@ final class AppState: ObservableObject {
         let ocr = info.subtitles.filter { $0.codec == "hdmv_pgs_subtitle" && $0.language == lang && !textLangs.contains(lang) }
         return (audio, Set(info.audio.map(\.id)).subtracting([audio]),
                 Set(info.subtitles.filter(\.isText).map(\.id)), ocr.first.map { [$0.id] } ?? [])
+    }
+
+    func closeMusic() {
+        music?.close()
+        music = nil
     }
 
     func close() {

@@ -13,11 +13,13 @@ mkdir -p $APP/Contents/MacOS $ENGINE/bin
 cp .build/release/Spatialize $APP/Contents/MacOS/
 
 # engine
-cp $ROOT/atmos2apple $ROOT/speaker-test $ENGINE/
-for t in atmos-render spatial-post walkgen apacenc mux vtcheck pgs2srt synccheck binaural; do cp $ROOT/bin/$t $ENGINE/bin/; done
+cp $ROOT/atmos2apple $ROOT/speaker-test $ROOT/music2spatial $ROOT/tools/separate.py $ENGINE/
+for t in atmos-render spatial-post walkgen stem-render apacenc mux vtcheck pgs2srt synccheck binaural; do cp $ROOT/bin/$t $ENGINE/bin/; done
 cp $ROOT/vendor/truehdd/target/release/truehdd $ENGINE/bin/
 cp $ROOT/vendor/OpenJOC/target/release/openjoc $ENGINE/bin/
 for t in ffmpeg ffprobe; do cp "$(command -v $t)" $ENGINE/bin/; done
+# uv installs the song separation engine (Demucs) on first use (MIT/Apache-2.0, astral.sh)
+UV=$(command -v uv || print ~/.local/bin/uv); [[ -x $UV ]] && cp $UV $ENGINE/bin/uv
 # a generic measured head for the live player's SOFA renderer (MIT KEMAR, public domain data)
 mkdir -p $ENGINE/hrtf
 cp $ROOT/vendor/libmysofa/share/MIT_KEMAR_normal_pinna.sofa $ENGINE/hrtf/KEMAR.sofa
@@ -55,8 +57,8 @@ cat > $APP/Contents/Info.plist <<'PLIST'
   <key>CFBundleExecutable</key><string>Spatialize</string>
   <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
-  <key>CFBundleShortVersionString</key><string>1.0</string>
-  <key>CFBundleVersion</key><string>1</string>
+  <key>CFBundleShortVersionString</key><string>1.1</string>
+  <key>CFBundleVersion</key><string>2</string>
   <key>LSMinimumSystemVersion</key><string>26.0</string>
   <key>LSApplicationCategoryType</key><string>public.app-category.video</string>
   <key>NSHighResolutionCapable</key><true/>
@@ -100,6 +102,15 @@ cat > $APP/Contents/Info.plist <<'PLIST'
       </array>
       <key>CFBundleTypeExtensions</key>
       <array><string>mkv</string><string>mka</string><string>mp4</string><string>m2ts</string><string>ts</string><string>mov</string></array>
+    </dict>
+    <dict>
+      <key>CFBundleTypeName</key><string>Song</string>
+      <key>CFBundleTypeRole</key><string>Viewer</string>
+      <key>LSHandlerRank</key><string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array><string>public.audio</string></array>
+      <key>CFBundleTypeExtensions</key>
+      <array><string>mp3</string><string>m4a</string><string>flac</string><string>wav</string><string>aiff</string><string>aif</string><string>ogg</string><string>opus</string><string>alac</string></array>
     </dict>
   </array>
 </dict>

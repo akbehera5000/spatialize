@@ -116,7 +116,8 @@ done
 # Scene clips and the live player's runs are quick and always start fresh.
 [[ -n $START || -n $KEEP_MASTER ]] && RESUME=off
 if [[ $RESUME == on ]]; then
-  KEY=$(print -rn -- "$INPUT|$(stat -f '%z|%m' "$INPUT")|$OUTPUT|${(pj:\0:)RUNARGS}" | md5 -q | cut -c1-16)
+  KEY=$(print -rn -- "$INPUT|$(stat -f '%z|%m' "$INPUT")|$OUTPUT|${(pj:\0:)RUNARGS}" | /sbin/md5 -q | cut -c1-16)
+  [[ ${#KEY} == 16 ]] || die "couldn't name the work folder"
   WORK=${OUTPUT:h}/.atmos2apple.r-$KEY
   if [[ -f $WORK/pid ]] && kill -0 "$(<$WORK/pid)" 2>/dev/null; then die "this movie is already being converted"; fi
   mkdir -p "$WORK" || die "cannot write to ${OUTPUT:h}"

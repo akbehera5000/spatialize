@@ -14,7 +14,7 @@ mkdir -p vendor bin
 (cd vendor/truehdd && cargo build --release)
 (cd vendor/OpenJOC && cargo build --release -p openjoc-cli)
 (cd tools/atmos-render && cargo build --release) \
-  && cp tools/atmos-render/target/release/{atmos-render,spatial-post,walkgen} bin/
+  && cp tools/atmos-render/target/release/{atmos-render,spatial-post,walkgen,stem-render} bin/
 swiftc -O tools/probe.swift -o bin/probe
 swiftc -O tools/apacenc.swift -o bin/apacenc
 swiftc -O tools/mux.swift -o bin/mux

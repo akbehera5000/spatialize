@@ -32,6 +32,21 @@ Spatialize closes that gap. There is no cloud and no account: everything runs on
 
 <p align="center"><img src="docs/img/editor.png" width="860" alt="Spatialize editor"></p>
 
+## 🎵 New in 1.1: 3D music from any song
+
+Drop in any song (MP3, AAC, FLAC, WAV…). An on-device AI ([Demucs](https://github.com/facebookresearch/demucs))
+splits it into **vocals, drums, bass and instruments**, and you place each one around your head on a
+dome: the band on stage in front of you, drums behind you, or everything slowly orbiting. Hear it
+live with AirPods head tracking, then export a **head-tracked Spatial Audio `.m4a`** for QuickTime
+and Music, with a binaural copy for every other player.
+
+<p align="center"><img src="docs/img/music.png" width="860" alt="3D music: placing vocals, drums, bass and instruments around you"></p>
+
+Presets: *On Stage*, *Front Row*, *Inside the Band*, *Orbit*, *Sky*. Each part has its own level,
+height, stereo width and orbit speed. Separation takes about 10–20 seconds per song on Apple silicon
+(GPU), and the parts are cached. The engine (about 700 MB) installs on first use.
+Command line: `./music2spatial song.mp3 out.m4a --stems "AZ:EL:WIDTH:GAIN:ORBIT;…"`.
+
 ## Features
 
 | | |
@@ -45,6 +60,7 @@ Spatialize closes that gap. There is no cloud and no account: everything runs on
 | ✅ **Sync verified** | After every conversion the result is compared with the source at 7 points. Offsets are fixed in seconds without reconverting |
 | 🌈 **HDR kept** | AV1 / HEVC / Dolby Vision 7 → 10-bit HDR10 HEVC with mastering metadata, or tone-mapped SDR |
 | 🔤 **Picture subtitles → text** | Blu-ray PGS subtitles read with Apple Vision OCR |
+| 🎵 **3D music from any song** | AI stem separation, a draggable stage, live head-tracked preview, Spatial Audio export |
 | 🧰 **Day-to-day** | Queue, scene previews, headphone EQ, dialogue / LFE / night mode / loudness, resume after interruptions, Finder right-click and Shortcuts actions |
 
 <p align="center"><img src="docs/img/editor-bottom.png" width="860" alt="Custom speaker placement"></p>
@@ -128,6 +144,7 @@ Headphone height is weak with Apple's generic head model, so the converter stren
 - `tools/apacenc.swift` – encodes 7.1.4 audio to APAC
 - `tools/mux.swift` – joins video + APAC audio into a `.mov` (ffmpeg can't mux APAC); also re-times
 - `tools/atmos-render/src/bin/spatial-post.rs` – mix stage: levels, room, dynamics, height, ambisonics
+- `music2spatial`, `tools/separate.py`, `tools/atmos-render/src/bin/stem-render.rs` – songs: Demucs separation, stem placement, APAC export
 - `tools/binaural/main.swift` – 7.1.4 → binaural stereo with a head model (`app/…/HRIRSet.swift`)
 - `tools/pgs2srt.swift` – PGS picture subtitles → SRT with Vision OCR
 - `vendor/libmysofa` – SOFA HRTF reader (BSD-3-Clause), compiled into the app

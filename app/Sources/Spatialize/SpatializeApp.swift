@@ -55,6 +55,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             MainActor.assumeIsolated { LiveSelfTest.run(URL(fileURLWithPath: dir)) }
             exit(0)
         }
+        if let song = ProcessInfo.processInfo.environment["SPATIALIZE_MUSIC_TEST"] {
+            Task { @MainActor in
+                await SelfTest.music(URL(fileURLWithPath: song))
+                exit(0)
+            }
+            return
+        }
         if let out = ProcessInfo.processInfo.environment["SPATIALIZE_SNAPSHOT"],
            let movie = CommandLine.arguments.dropFirst().first(where: { !$0.hasPrefix("-") }) {
             Task { @MainActor in
@@ -102,7 +109,33 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 enum SelfTest {
     static var active: Bool {
         let env = ProcessInfo.processInfo.environment
-        return env["SPATIALIZE_LIVE_TEST"] != nil || env["SPATIALIZE_SNAPSHOT"] != nil
+        return env["SPATIALIZE_LIVE_TEST"] != nil || env["SPATIALIZE_SNAPSHOT"] != nil || env["SPATIALIZE_MUSIC_TEST"] != nil
+    }
+
+    /// Opens a song in Music mode, separates it (or uses the cached parts), builds the live player
+    /// and plays it muted for two seconds: checks the whole chain without sound or a window.
+    @MainActor
+    static func music(_ song: URL) async {
+        setvbuf(stdout, nil, _IOLBF, 0)
+        let app = AppState.shared
+        app.open(song)
+        for _ in 0..<100 where app.music == nil { try? await Task.sleep(for: .milliseconds(100)) }
+        app.music?.begin()   // the Music view starts this when it appears; there's no view here
+        for _ in 0..<600 where app.music?.phase != .ready {
+            if case .failed(let m) = app.music?.phase { print("music: failed: \(m)"); return }
+            try? await Task.sleep(for: .milliseconds(200))
+        }
+        guard let s = app.music, let p = s.player else { print("music: no player (\(String(describing: app.music?.phase)))"); return }
+        print("music: ready, \(String(format: "%.1f", p.duration)) s, title \(s.title)")
+        p.mute()
+        p.play()
+        try? await Task.sleep(for: .seconds(2))
+        print("music: position after 2 s = \(String(format: "%.2f", p.position)) s")
+        s.apply(.orbit)
+        p.seek(to: 30)
+        try? await Task.sleep(for: .seconds(1))
+        print("music: after seek to 30 s = \(String(format: "%.2f", p.position)) s")
+        p.stop()
     }
 
     /// Renders the editor for a movie into a PNG without opening a window (layout check).

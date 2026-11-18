@@ -99,18 +99,19 @@ func fourcc(_ t: AVAssetTrack) async -> String {
 
 /// Builds the item list for a fresh movie.
 func buildItems() async throws -> [Item] {
-    guard let v = opts["video"], let a = opts["audio"] else { fail(usage) }
-    let videoAsset = AVURLAsset(url: URL(fileURLWithPath: v))
+    guard let a = opts["audio"] else { fail(usage) }
+    // no --video: an audio-only file (music)
+    let videoAsset = opts["video"].map { AVURLAsset(url: URL(fileURLWithPath: $0)) }
     let audioAsset = AVURLAsset(url: URL(fileURLWithPath: a))
-    let sourceTracks = try await videoAsset.load(.tracks)
+    let sourceTracks = try await videoAsset?.load(.tracks) ?? []
     guard let spatial = try await audioAsset.loadTracks(withMediaType: .audio).first else { fail("no audio in \(a)") }
-    guard sourceTracks.contains(where: { $0.mediaType == .video }) else { fail("no video in \(v)") }
+    if let v = opts["video"], !sourceTracks.contains(where: { $0.mediaType == .video }) { fail("no video in \(v)") }
     let lang = opts["lang"].flatMap { $0 == "und" || $0.isEmpty ? nil : $0 }
     let tag = lang.map { Locale.LanguageCode($0).identifier(.alpha2) ?? $0 }
     let hasCompat = opts["compat"] != nil
 
     var items: [Item] = sourceTracks.filter { $0.mediaType == .video }
-        .map { Item(asset: videoAsset, track: $0, role: .other, enabled: true) }
+        .map { Item(asset: videoAsset!, track: $0, role: .other, enabled: true) }
     // the compatible copy comes before the spatial track (players without APAC take it first)
     // The first copy becomes the spatial track's fallback; an extra 5.1 copy follows it, also
     // in the movie's language and timed with the main audio.
@@ -125,7 +126,7 @@ func buildItems() async throws -> [Item] {
     items.append(Item(asset: audioAsset, track: spatial, role: .spatial, enabled: true,
                       language: hasCompat ? "und" : lang, languageTag: hasCompat ? nil : tag, name: TrackName.spatial))
     for t in sourceTracks where t.mediaType != .video {
-        items.append(Item(asset: videoAsset, track: t, role: .other, enabled: false))
+        items.append(Item(asset: videoAsset!, track: t, role: .other, enabled: false))
     }
     if let e = opts["extra"] {
         let asset = AVURLAsset(url: URL(fileURLWithPath: e))
@@ -166,7 +167,12 @@ func run() async throws {
         fail("the output must be a different file")
     }
     try? FileManager.default.removeItem(at: outURL)
-    let writer = try AVAssetWriter(outputURL: outURL, fileType: .mov)
+    let writer = try AVAssetWriter(outputURL: outURL, fileType: outURL.pathExtension.lowercased() == "m4a" ? .m4a : .mov)
+    // --metadata-from SONG: title, artist, album, artwork and so on from the original file
+    if let m = opts["metadata-from"] {
+        let items = (try? await AVURLAsset(url: URL(fileURLWithPath: m)).load(.commonMetadata)) ?? []
+        writer.metadata = items.compactMap { $0.mutableCopy() as? AVMetadataItem }
+    }
     var lanes: [Lane] = []
     var audioInputs: [AVAssetWriterInput] = []
     var subtitleInputs: [AVAssetWriterInput] = []
