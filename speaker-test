@@ -1,0 +1,49 @@
+#!/bin/zsh
+# speaker-test: makes a short QuickTime movie where pink noise walks through all 11 speakers,
+# with the speaker's name on screen, using the same height settings as a conversion.
+# usage: speaker-test OUT.mov [--height eq|hoa|hoa+eq|off] [--height-eq DB] [--height-angle DEG]
+#                             [--speakers LAYOUT]
+set -euo pipefail
+ROOT=${0:A:h}
+BIN=$ROOT/bin
+FFMPEG=$BIN/ffmpeg; [[ -x $FFMPEG ]] || FFMPEG=${commands[ffmpeg]:-/usr/local/bin/ffmpeg}
+
+OUT="" HEIGHT=eq HEIGHT_EQ=6 HEIGHT_ANGLE=60 SPEAKERS=""
+while (( $# )); do
+  case $1 in
+    --height) HEIGHT=$2; shift 2 ;;
+    --height-eq) HEIGHT_EQ=$2; shift 2 ;;
+    --height-angle) HEIGHT_ANGLE=$2; shift 2 ;;
+    --speakers) SPEAKERS=$2; shift 2 ;;
+    *) OUT=$1; shift ;;
+  esac
+done
+[[ -n $OUT ]] || { print -u2 "usage: speaker-test OUT.mov [options]"; exit 2; }
+
+POST=() FORMAT=()
+case $HEIGHT in
+  eq) POST=(--height-eq $HEIGHT_EQ) ;;
+  hoa) POST=(--hoa $HEIGHT_ANGLE); FORMAT=(hoa16) ;;
+  hoa+eq) POST=(--height-eq $HEIGHT_EQ --hoa $HEIGHT_ANGLE); FORMAT=(hoa16) ;;
+esac
+if [[ -n $SPEAKERS ]]; then
+  POST=(); [[ $HEIGHT == (eq|hoa+eq) ]] && POST=(--height-eq $HEIGHT_EQ)
+  POST+=(--layout $SPEAKERS); FORMAT=(hoa16)
+fi
+
+W=$(mktemp -d)
+trap 'rm -rf $W' EXIT
+$BIN/walkgen 2>$W/sched.txt | $BIN/spatial-post $POST | $BIN/apacenc $W/a.caf 48000 1536000 $FORMAT 2>/dev/null
+
+FONT=/System/Library/Fonts/Supplemental/Arial.ttf
+[[ -f $FONT ]] || FONT=/System/Library/Fonts/Helvetica.ttc
+filters=()
+while read -r s label; do
+  # braces matter: zsh would read "$FONT:t" as the :t (basename) modifier
+  filters+=("drawtext=fontfile=${FONT}:text='${label}':fontsize=96:fontcolor=white:x=(w-tw)/2:y=(h-th)/2:enable='between(t,${s},${s}+1.5)'")
+done < $W/sched.txt
+print -r -- ${(j:,:)filters} > $W/vf.txt
+$FFMPEG -v error -y -f lavfi -i color=c=0x1b2130:s=1280x720:r=24:d=22 -/vf $W/vf.txt \
+  -c:v h264_videotoolbox -q:v 60 -pix_fmt yuv420p $W/v.mp4
+$BIN/mux --video $W/v.mp4 --audio $W/a.caf --out "$OUT"
+print -- "$OUT"

@@ -1,0 +1,11 @@
+.DS_Store
+# build output
+/bin/
+/Spatialize.app/
+/app/Spatialize.app/
+app/.build/
+tools/atmos-render/target/
+*.zip
+# fetched and built by ./build.sh
+/vendor/truehdd/
+/vendor/OpenJOC/

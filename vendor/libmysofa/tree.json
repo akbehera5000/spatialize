@@ -1,0 +1,1509 @@
+{
+  "sha": "648eed03472e6720a1ea45d1a1f86c4efb569ff9",
+  "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/648eed03472e6720a1ea45d1a1f86c4efb569ff9",
+  "tree": [
+    {
+      "path": ".appveyor.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e14cd81a6656ea52cbb4ef6e8efd02a0324402e",
+      "size": 449,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7e14cd81a6656ea52cbb4ef6e8efd02a0324402e"
+    },
+    {
+      "path": ".cproject",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfc65e1cb77ee26b8a73e1fdfc718c5f774c9050",
+      "size": 5755,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/cfc65e1cb77ee26b8a73e1fdfc718c5f774c9050"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9af2031ac3e55bd208f4f91b3061300e994fa494",
+      "size": 188,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9af2031ac3e55bd208f4f91b3061300e994fa494"
+    },
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fe2306fde5defa37060aee3e9fc46adf1ca0ef06",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/fe2306fde5defa37060aee3e9fc46adf1ca0ef06"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5fe7c4360377eb353dad2e804796d0b424e9440e",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/5fe7c4360377eb353dad2e804796d0b424e9440e"
+    },
+    {
+      "path": ".github/workflows/build.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a47c5ad8e912602968efaf48137dd3e0b5b7815d",
+      "size": 2710,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/a47c5ad8e912602968efaf48137dd3e0b5b7815d"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "293316246bd6e7f4a4dc988e0b1a124b7b762f12",
+      "size": 1758,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/293316246bd6e7f4a4dc988e0b1a124b7b762f12"
+    },
+    {
+      "path": ".project",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30d679afaa6a4548fdc889168f2b2f6467db5324",
+      "size": 762,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/30d679afaa6a4548fdc889168f2b2f6467db5324"
+    },
+    {
+      "path": ".travis.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5070402f5b7c34fd2670fb0060a6c78e50791e04",
+      "size": 1819,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/5070402f5b7c34fd2670fb0060a6c78e50791e04"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e03232d845bc341d3578c4112acf5be76f7cba0",
+      "size": 6848,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6e03232d845bc341d3578c4112acf5be76f7cba0"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d8370b13ee26dea8991b8298e645508a3b333bf",
+      "size": 3382,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2d8370b13ee26dea8991b8298e645508a3b333bf"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b1939dbb62ab1d89b9f4c68e1766392b12605af3",
+      "size": 1453,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/b1939dbb62ab1d89b9f4c68e1766392b12605af3"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4486f37c18f83d19064fe5c12f7407fce4d1295b",
+      "size": 9619,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4486f37c18f83d19064fe5c12f7407fce4d1295b"
+    },
+    {
+      "path": "SECURITY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5cc67306bfe6f17398f624022ab23f39849f7ce6",
+      "size": 1642,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/5cc67306bfe6f17398f624022ab23f39849f7ce6"
+    },
+    {
+      "path": "build",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f2642652896d8476da0386b2073f9ef10c29dcd9",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/f2642652896d8476da0386b2073f9ef10c29dcd9"
+    },
+    {
+      "path": "build/.empty",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "build/project.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f1517d4079519799c05460a10fa50decaa4df12",
+      "size": 163,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4f1517d4079519799c05460a10fa50decaa4df12"
+    },
+    {
+      "path": "cmake",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cde346e73f99dc6cdd9af66fb18835725d58e2c6",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/cde346e73f99dc6cdd9af66fb18835725d58e2c6"
+    },
+    {
+      "path": "cmake/FindCUnit.cmake",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "22b5a707fb22e83b9e24e6ed9f6f125579babead",
+      "size": 1336,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/22b5a707fb22e83b9e24e6ed9f6f125579babead"
+    },
+    {
+      "path": "libmysofa.pc.cmake",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c597fafb36b15f9322c541d2d42fb7aefd5c309",
+      "size": 309,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/3c597fafb36b15f9322c541d2d42fb7aefd5c309"
+    },
+    {
+      "path": "mysofaConfig.cmake.in",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03a2c424ecbab00826c8dd6ae79d98ab75a72422",
+      "size": 217,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/03a2c424ecbab00826c8dd6ae79d98ab75a72422"
+    },
+    {
+      "path": "params.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6227b75c46becd7c8393c7a9d342cddb9dd5d781",
+      "size": 175,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6227b75c46becd7c8393c7a9d342cddb9dd5d781"
+    },
+    {
+      "path": "share",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fb15d49105360869f1c43405b4507fa796c07b7a",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/fb15d49105360869f1c43405b4507fa796c07b7a"
+    },
+    {
+      "path": "share/MIT_KEMAR_normal_pinna.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7067bb9c282205d669000825cfe5039f084fb599",
+      "size": 1173158,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7067bb9c282205d669000825cfe5039f084fb599"
+    },
+    {
+      "path": "share/default.sofa",
+      "mode": "120000",
+      "type": "blob",
+      "sha": "9826e250ac38b984d561327ea3b50912704a3221",
+      "size": 27,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9826e250ac38b984d561327ea3b50912704a3221"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cc705ed8774073c879a3b742d0f6280412e7a3ba",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/cc705ed8774073c879a3b742d0f6280412e7a3ba"
+    },
+    {
+      "path": "src/.dir-locals.el",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a0bffa53446c0d541d7068026af9fcfcebe1156",
+      "size": 100,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7a0bffa53446c0d541d7068026af9fcfcebe1156"
+    },
+    {
+      "path": "src/CMakeLists.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37fe41f9a2893e334829a8b77cdcacd8c91b1167",
+      "size": 6845,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/37fe41f9a2893e334829a8b77cdcacd8c91b1167"
+    },
+    {
+      "path": "src/config.h.in",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "638e1122b3c2cd945d0fa0bfe186753611b0188f",
+      "size": 307,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/638e1122b3c2cd945d0fa0bfe186753611b0188f"
+    },
+    {
+      "path": "src/hdf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8324cae1f175547780babae584cfbc8324608f7a",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/8324cae1f175547780babae584cfbc8324608f7a"
+    },
+    {
+      "path": "src/hdf/btree.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb37dbc10eb31d57c372ca2e3c2ab0275944752c",
+      "size": 14325,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/fb37dbc10eb31d57c372ca2e3c2ab0275944752c"
+    },
+    {
+      "path": "src/hdf/dataobject.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ccf08967fa00cdbbc1d3643bd720b155f61e4b8",
+      "size": 39164,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/1ccf08967fa00cdbbc1d3643bd720b155f61e4b8"
+    },
+    {
+      "path": "src/hdf/fractalhead.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6787053ada2923e6920075646e342ee30c8b5d5d",
+      "size": 22787,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6787053ada2923e6920075646e342ee30c8b5d5d"
+    },
+    {
+      "path": "src/hdf/gcol.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be15b74ea26671538b0336ab5cb4127e2b6e36a7",
+      "size": 3589,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/be15b74ea26671538b0336ab5cb4127e2b6e36a7"
+    },
+    {
+      "path": "src/hdf/gunzip.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa93bf8d7bad43bb15d8fa0a5df9ab050f810b34",
+      "size": 686,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/fa93bf8d7bad43bb15d8fa0a5df9ab050f810b34"
+    },
+    {
+      "path": "src/hdf/reader.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc7befcf6fc783d63e10541df69dcab710d0819e",
+      "size": 4731,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/cc7befcf6fc783d63e10541df69dcab710d0819e"
+    },
+    {
+      "path": "src/hdf/superblock.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c1e910d10c74c29848550e69044632c688a6dd20",
+      "size": 7497,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/c1e910d10c74c29848550e69044632c688a6dd20"
+    },
+    {
+      "path": "src/hrtf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0917e60c0652fcd9eee2f4c14fcf0017c666dca5",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/0917e60c0652fcd9eee2f4c14fcf0017c666dca5"
+    },
+    {
+      "path": "src/hrtf/cache.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3b503181436fc7cf7c1b347a728526070c0d5b7",
+      "size": 2627,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/d3b503181436fc7cf7c1b347a728526070c0d5b7"
+    },
+    {
+      "path": "src/hrtf/check.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e234a76b5950fb84a0c87220822897acbed5978",
+      "size": 7958,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/3e234a76b5950fb84a0c87220822897acbed5978"
+    },
+    {
+      "path": "src/hrtf/easy.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e9e3a38d70588c409337ddc28d1b6cd31191e2d",
+      "size": 8249,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6e9e3a38d70588c409337ddc28d1b6cd31191e2d"
+    },
+    {
+      "path": "src/hrtf/interpolate.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4829543d874fb35df5fda0aa66cc85ab3bd166a7",
+      "size": 4403,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4829543d874fb35df5fda0aa66cc85ab3bd166a7"
+    },
+    {
+      "path": "src/hrtf/kdtree.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a3e778e47b25ae9299407bdc26908ae2bf82b4d",
+      "size": 7698,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7a3e778e47b25ae9299407bdc26908ae2bf82b4d"
+    },
+    {
+      "path": "src/hrtf/kdtree.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "963460e6694fd098d321cd4de661b52e0b3399b0",
+      "size": 2024,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/963460e6694fd098d321cd4de661b52e0b3399b0"
+    },
+    {
+      "path": "src/hrtf/lookup.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53579eca578ce82de37720ea27a39057941a8078",
+      "size": 3014,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/53579eca578ce82de37720ea27a39057941a8078"
+    },
+    {
+      "path": "src/hrtf/loudness.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72051a713c308e47cfd1a6151743f761c8023d4f",
+      "size": 1383,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/72051a713c308e47cfd1a6151743f761c8023d4f"
+    },
+    {
+      "path": "src/hrtf/minphase.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "059fe7689f84b8086ffdf7e852c8d682693eff6e",
+      "size": 2316,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/059fe7689f84b8086ffdf7e852c8d682693eff6e"
+    },
+    {
+      "path": "src/hrtf/mysofa.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "538f0b6b2376bdf859ce048f93a553d1946a4051",
+      "size": 7870,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/538f0b6b2376bdf859ce048f93a553d1946a4051"
+    },
+    {
+      "path": "src/hrtf/mysofa_export.h.in",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e27a442ca87cc6b63b618d9eb70087c0402fe503",
+      "size": 101,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/e27a442ca87cc6b63b618d9eb70087c0402fe503"
+    },
+    {
+      "path": "src/hrtf/neighbors.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d8b6523ac427466f948fbac33f43cf3e5a3f599",
+      "size": 4717,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7d8b6523ac427466f948fbac33f43cf3e5a3f599"
+    },
+    {
+      "path": "src/hrtf/portable_endian.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fb4b55afa54a86f6167fdabb4671587cef04c2e",
+      "size": 3096,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/5fb4b55afa54a86f6167fdabb4671587cef04c2e"
+    },
+    {
+      "path": "src/hrtf/reader.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a03bed92ea97fcdb4f26ba2b83ad38528546917",
+      "size": 12224,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/5a03bed92ea97fcdb4f26ba2b83ad38528546917"
+    },
+    {
+      "path": "src/hrtf/resample.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2054173447cb77638acbe90fc0cb68b64d021006",
+      "size": 2343,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2054173447cb77638acbe90fc0cb68b64d021006"
+    },
+    {
+      "path": "src/hrtf/spherical.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "549f09dccabf9a985065324908e72c14d1f0257e",
+      "size": 1299,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/549f09dccabf9a985065324908e72c14d1f0257e"
+    },
+    {
+      "path": "src/hrtf/tools.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48f1c3d6bfb80aaa1d4ecd4dcaede06bfe30f71d",
+      "size": 3826,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/48f1c3d6bfb80aaa1d4ecd4dcaede06bfe30f71d"
+    },
+    {
+      "path": "src/hrtf/tools.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "56888c1a0122ae7c2d24784ed8d07c557bafa18b",
+      "size": 1456,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/56888c1a0122ae7c2d24784ed8d07c557bafa18b"
+    },
+    {
+      "path": "src/resampler",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c94125cb3f0322481f55b844381a4683127172d6",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/c94125cb3f0322481f55b844381a4683127172d6"
+    },
+    {
+      "path": "src/resampler/arch.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9009b352897728e74d85074e846229a89185b55b",
+      "size": 4894,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9009b352897728e74d85074e846229a89185b55b"
+    },
+    {
+      "path": "src/resampler/speex_resampler.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78212a9a4f32c92619093da9287375bcb526a925",
+      "size": 27827,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/78212a9a4f32c92619093da9287375bcb526a925"
+    },
+    {
+      "path": "src/resampler/speex_resampler.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0507e9ffb62c0855571d52f9f8b0580736bba859",
+      "size": 14246,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/0507e9ffb62c0855571d52f9f8b0580736bba859"
+    },
+    {
+      "path": "src/resampler/stack_alloc.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "62d6d3e9c163a5d007be997c66e98840a3514f18",
+      "size": 3523,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/62d6d3e9c163a5d007be997c66e98840a3514f18"
+    },
+    {
+      "path": "src/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bdfdbc0e8e26b6176ff4e8d326b7a2651ffc0e22",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/bdfdbc0e8e26b6176ff4e8d326b7a2651ffc0e22"
+    },
+    {
+      "path": "src/tests/cache.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c484e72f86348952d5f67b2eb8e4776db5b90a11",
+      "size": 2457,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/c484e72f86348952d5f67b2eb8e4776db5b90a11"
+    },
+    {
+      "path": "src/tests/check.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "047215b3dff9329e4e18c16dfff7a2c71ef393db",
+      "size": 578,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/047215b3dff9329e4e18c16dfff7a2c71ef393db"
+    },
+    {
+      "path": "src/tests/check_data.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da5af426192b2b39fb464160dfd9c389750e7d61",
+      "size": 1190,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/da5af426192b2b39fb464160dfd9c389750e7d61"
+    },
+    {
+      "path": "src/tests/easy.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19f84516c115122c7bacce42561e29a9bf0cccce",
+      "size": 5637,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/19f84516c115122c7bacce42561e29a9bf0cccce"
+    },
+    {
+      "path": "src/tests/external.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c35cf563c5cc2dd469f03b81f797719f52e5552",
+      "size": 1940,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/3c35cf563c5cc2dd469f03b81f797719f52e5552"
+    },
+    {
+      "path": "src/tests/internal.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53e8272c2c06fefce57c07030873de8c38f9260c",
+      "size": 961,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/53e8272c2c06fefce57c07030873de8c38f9260c"
+    },
+    {
+      "path": "src/tests/interpolate.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fc892be8f7862c9ef76e3838cec3d35adc9a21c",
+      "size": 1611,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2fc892be8f7862c9ef76e3838cec3d35adc9a21c"
+    },
+    {
+      "path": "src/tests/json.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa636b172173d6ce468347064ff5b4c057ae7c59",
+      "size": 5881,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/aa636b172173d6ce468347064ff5b4c057ae7c59"
+    },
+    {
+      "path": "src/tests/json.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c0b7048b0a7586b0e0e15d588ba632e96373d97",
+      "size": 115,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4c0b7048b0a7586b0e0e15d588ba632e96373d97"
+    },
+    {
+      "path": "src/tests/lookup.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67095532df72987f7cb34c26a66e3fae84566017",
+      "size": 2055,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/67095532df72987f7cb34c26a66e3fae84566017"
+    },
+    {
+      "path": "src/tests/loudness.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a3ec0e3b94f8060f98ee78f02cb0a506a5a8ab4",
+      "size": 1044,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/1a3ec0e3b94f8060f98ee78f02cb0a506a5a8ab4"
+    },
+    {
+      "path": "src/tests/minphase.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e9b5063e1d86b69307a76fb80eb7e0f0e65ad440",
+      "size": 1507,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/e9b5063e1d86b69307a76fb80eb7e0f0e65ad440"
+    },
+    {
+      "path": "src/tests/multithread.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a31ecf89cc71b07dfc3365daa49713abdc9b9eb",
+      "size": 3637,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9a31ecf89cc71b07dfc3365daa49713abdc9b9eb"
+    },
+    {
+      "path": "src/tests/neighbors.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78ac587432080e71012d26ac694ee0658448e6c6",
+      "size": 2118,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/78ac587432080e71012d26ac694ee0658448e6c6"
+    },
+    {
+      "path": "src/tests/resample.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9eb1ba39dc588406a3d0f30deb7814a5cdd6fa5b",
+      "size": 2593,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9eb1ba39dc588406a3d0f30deb7814a5cdd6fa5b"
+    },
+    {
+      "path": "src/tests/sofa2json.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2de7c9ef6d13de7db40dab9f4e7db16f38e857e2",
+      "size": 3377,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2de7c9ef6d13de7db40dab9f4e7db16f38e857e2"
+    },
+    {
+      "path": "src/tests/tests.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "891d4500313806f7b184914fb4c147c085e6520a",
+      "size": 537,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/891d4500313806f7b184914fb4c147c085e6520a"
+    },
+    {
+      "path": "src/tests/tools.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "818271d65f81f6499edfa2b0ee2b5462dd6f32ed",
+      "size": 2907,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/818271d65f81f6499edfa2b0ee2b5462dd6f32ed"
+    },
+    {
+      "path": "src/tests/user_defined_variable.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "80d02aeb7919a026de8abafb25fddd5ba1d027f3",
+      "size": 853,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/80d02aeb7919a026de8abafb25fddd5ba1d027f3"
+    },
+    {
+      "path": "symonics-mysofa.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9246f0cc00389816bc9b12b128cc35ea3f84155",
+      "size": 7264,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f9246f0cc00389816bc9b12b128cc35ea3f84155"
+    },
+    {
+      "path": "tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cca74671355f73b867c17cef7a3590e1d519c249",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/cca74671355f73b867c17cef7a3590e1d519c249"
+    },
+    {
+      "path": "tests/CIPIC_subject_003_hrir_final.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10bbc7a833638f4ecf21129c98b648e323606f9b",
+      "size": 4177375,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/10bbc7a833638f4ecf21129c98b648e323606f9b"
+    },
+    {
+      "path": "tests/CIPIC_subject_003_hrir_final.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aedce6e36bf69cd257f12f7647112e87187ca87f",
+      "size": 3568629,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/aedce6e36bf69cd257f12f7647112e87187ca87f"
+    },
+    {
+      "path": "tests/CIPIC_subject_003_hrir_final_itdInDelayField.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "124fc398df6af06901cfa67fb42858f242d7d84d",
+      "size": 3377059,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/124fc398df6af06901cfa67fb42858f242d7d84d"
+    },
+    {
+      "path": "tests/D1_48K_24bit_0.3s_FIR_SOFA.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "063d58ca453eb8036ca9b9c88342acee6cf18f6a",
+      "size": 11575138,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/063d58ca453eb8036ca9b9c88342acee6cf18f6a"
+    },
+    {
+      "path": "tests/FHK_HRIR_L2354.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec09a6ea916d4cfda9f16c23a1dfba8c00ecc5b9",
+      "size": 5163772,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/ec09a6ea916d4cfda9f16c23a1dfba8c00ecc5b9"
+    },
+    {
+      "path": "tests/FHK_HRIR_L2354.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0486e801618937c5f7a68d752ea81047b0d3ef9c",
+      "size": 2350180,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/0486e801618937c5f7a68d752ea81047b0d3ef9c"
+    },
+    {
+      "path": "tests/H20_44K_16bit_256tap_FIR_SOFA.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db8701bb2469a9d2db432cc489f2f847f7561e08",
+      "size": 1572624,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/db8701bb2469a9d2db432cc489f2f847f7561e08"
+    },
+    {
+      "path": "tests/H20_44K_16bit_256tap_FIR_SOFA.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d030e498dbee4b334546fcbad5d9c9a1cd9d38f",
+      "size": 8755746,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2d030e498dbee4b334546fcbad5d9c9a1cd9d38f"
+    },
+    {
+      "path": "tests/LICENSE.CIPIC_subject_003_hrir_final",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a1e5fc9b5d40ec6a298cbb3ccc8cf0cf12712a6",
+      "size": 2259,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/8a1e5fc9b5d40ec6a298cbb3ccc8cf0cf12712a6"
+    },
+    {
+      "path": "tests/LICENSE.D1_48K_24bit_0.3s_FIR_SOFA",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "size": 11358,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+    },
+    {
+      "path": "tests/LICENSE.FHK_HRIR_L2354",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67062588956e2f0462c24e3d4219e8d0907a4499",
+      "size": 19587,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/67062588956e2f0462c24e3d4219e8d0907a4499"
+    },
+    {
+      "path": "tests/LICENSE.H20_44K_16bit_256tap_FIR_SOFA",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe574585316291713c07b8d2b19f2390b1ad7e5c",
+      "size": 1113,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/fe574585316291713c07b8d2b19f2390b1ad7e5c"
+    },
+    {
+      "path": "tests/LICENSE.LISTEN_1002_IRC_1002_C_HRIR",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94e2e4ebcf0d0c2a122e33fda137e52ab38ae274",
+      "size": 619,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/94e2e4ebcf0d0c2a122e33fda137e52ab38ae274"
+    },
+    {
+      "path": "tests/LICENSE.MIT_KEMAR_pinnae",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f9b5f9b7d32c03204048ac326637b9db23d4eda",
+      "size": 1414,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/1f9b5f9b7d32c03204048ac326637b9db23d4eda"
+    },
+    {
+      "path": "tests/LICENSE.TU-Berlin_QU_KEMAR_anechoic",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef5cf5fa3d7a0f8b5658f83adb0afa2b9394ac94",
+      "size": 19431,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/ef5cf5fa3d7a0f8b5658f83adb0afa2b9394ac94"
+    },
+    {
+      "path": "tests/LICENSE.pulse",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2dc68cb9d6d3892657311ff6e72e8caf04b43ef8",
+      "size": 12851,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2dc68cb9d6d3892657311ff6e72e8caf04b43ef8"
+    },
+    {
+      "path": "tests/LISTEN_1002_IRC_1002_C_HRIR.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f4938db3694da0f589062f60593e943baf53ccc",
+      "size": 1626612,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4f4938db3694da0f589062f60593e943baf53ccc"
+    },
+    {
+      "path": "tests/LISTEN_1002_IRC_1002_C_HRIR.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9f2ff3f16f9adabec58ea18fef8ce987c313b3ba",
+      "size": 1388635,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9f2ff3f16f9adabec58ea18fef8ce987c313b3ba"
+    },
+    {
+      "path": "tests/MIT_KEMAR_large_pinna.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aecbec0164fc0c283c4ad21b99ec65011fc1057f",
+      "size": 1164707,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/aecbec0164fc0c283c4ad21b99ec65011fc1057f"
+    },
+    {
+      "path": "tests/MIT_KEMAR_large_pinna.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6788e4fa9e4a71f9662049d4054047b017f13b4d",
+      "size": 1204924,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6788e4fa9e4a71f9662049d4054047b017f13b4d"
+    },
+    {
+      "path": "tests/MIT_KEMAR_normal_pinna.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9c24eef6942d80b1c5412d09849c29217314335",
+      "size": 1173507,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/b9c24eef6942d80b1c5412d09849c29217314335"
+    },
+    {
+      "path": "tests/MIT_KEMAR_normal_pinna.old.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3fa3c917c1297a93aebe861d859687b224ddffd",
+      "size": 1173236,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/a3fa3c917c1297a93aebe861d859687b224ddffd"
+    },
+    {
+      "path": "tests/MIT_KEMAR_normal_pinna.old.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ea10d9a09c7521f90e36cb0674ded78e2509b19",
+      "size": 1210594,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6ea10d9a09c7521f90e36cb0674ded78e2509b19"
+    },
+    {
+      "path": "tests/MIT_KEMAR_normal_pinna.sofa",
+      "mode": "120000",
+      "type": "blob",
+      "sha": "f213559bd14c0d9d710feb547b06f10e5936e23c",
+      "size": 36,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f213559bd14c0d9d710feb547b06f10e5936e23c"
+    },
+    {
+      "path": "tests/Mesh2HRTF.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f05c51026da37e69700f04b14b5e4996ac64c176",
+      "size": 8020794,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f05c51026da37e69700f04b14b5e4996ac64c176"
+    },
+    {
+      "path": "tests/Pulse.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c649491ea2ffd6b804c77882f0db9f5f496b19b7",
+      "size": 14119,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/c649491ea2ffd6b804c77882f0db9f5f496b19b7"
+    },
+    {
+      "path": "tests/Pulse.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4205d4b602aa4086928808d545e15cac98299871",
+      "size": 150898,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4205d4b602aa4086928808d545e15cac98299871"
+    },
+    {
+      "path": "tests/README",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb9a311356f7a763d4b7732e61a26f6e399e5e86",
+      "size": 183,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/bb9a311356f7a763d4b7732e61a26f6e399e5e86"
+    },
+    {
+      "path": "tests/TU-Berlin_QU_KEMAR_anechoic_radius_0.5_1_2_3_m.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ae8a564c33d0389f4363b2bdd7578612f883ade",
+      "size": 50826283,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6ae8a564c33d0389f4363b2bdd7578612f883ade"
+    },
+    {
+      "path": "tests/TU-Berlin_QU_KEMAR_anechoic_radius_0.5_1_2_3_m.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fdabf781fc04eee6028016d25a0b1bf5100042a8",
+      "size": 42034321,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/fdabf781fc04eee6028016d25a0b1bf5100042a8"
+    },
+    {
+      "path": "tests/TU-Berlin_QU_KEMAR_anechoic_radius_0.5m.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41ba737e84347c4809a7619c0954bfa83a5b2fe3",
+      "size": 12657074,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/41ba737e84347c4809a7619c0954bfa83a5b2fe3"
+    },
+    {
+      "path": "tests/TU-Berlin_QU_KEMAR_anechoic_radius_0.5m.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7dd17c423e457f966d622e345ccb58684d3c25a",
+      "size": 10554130,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f7dd17c423e457f966d622e345ccb58684d3c25a"
+    },
+    {
+      "path": "tests/TestSOFA48_netcdf472.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ce059f881c265ccdea1d102bcd5a3436d9a4627",
+      "size": 10632973,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6ce059f881c265ccdea1d102bcd5a3436d9a4627"
+    },
+    {
+      "path": "tests/TestSOFA48_netcdf472.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a95b61bb574d84e4eeb63c3100c90741513ae6b",
+      "size": 13737419,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9a95b61bb574d84e4eeb63c3100c90741513ae6b"
+    },
+    {
+      "path": "tests/compare.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "0943ea860d3f64bfce7b29a36d65e867cbfae37f",
+      "size": 1242,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/0943ea860d3f64bfce7b29a36d65e867cbfae37f"
+    },
+    {
+      "path": "tests/compareIgnoreNew.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "9fc5e5d553d4abf523b550d115bffb019cd001c6",
+      "size": 1258,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9fc5e5d553d4abf523b550d115bffb019cd001c6"
+    },
+    {
+      "path": "tests/dtf_nh2.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f707abe316dafc915a8d1faaf9f5bfd10765408",
+      "size": 6892373,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6f707abe316dafc915a8d1faaf9f5bfd10765408"
+    },
+    {
+      "path": "tests/dtf_nh2.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e12fe4084a5c35ab795292b2e29d312b9a24bf4a",
+      "size": 2972272,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/e12fe4084a5c35ab795292b2e29d312b9a24bf4a"
+    },
+    {
+      "path": "tests/example_dummy_sofa48.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf52e96be362675c285aaff582b6cd227e091175",
+      "size": 3221,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/bf52e96be362675c285aaff582b6cd227e091175"
+    },
+    {
+      "path": "tests/example_dummy_sofa48.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a30dc31287754ad5d11f076960d312be53678370",
+      "size": 13736378,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/a30dc31287754ad5d11f076960d312be53678370"
+    },
+    {
+      "path": "tests/example_dummy_sofa48_with_user_defined_variable.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ece3079be76789f58c9555f504885d5f80c55237",
+      "size": 4910,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/ece3079be76789f58c9555f504885d5f80c55237"
+    },
+    {
+      "path": "tests/example_dummy_sofa48_with_user_defined_variable.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63a2118083b16dfb2c8b26337a033279e6a4d0bd",
+      "size": 13769739,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/63a2118083b16dfb2c8b26337a033279e6a4d0bd"
+    },
+    {
+      "path": "tests/fail-issue-130.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "721e0256efff3f65fa923a063c13417f7825b2ab",
+      "size": 104124,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/721e0256efff3f65fa923a063c13417f7825b2ab"
+    },
+    {
+      "path": "tests/fail-issue-132.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4c72d4339b922fa7e37a007c978f17fa5d12675",
+      "size": 104124,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/b4c72d4339b922fa7e37a007c978f17fa5d12675"
+    },
+    {
+      "path": "tests/fail-issue-135.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d443a785b81b56ddff3a943cbab1243e0fe647c",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9d443a785b81b56ddff3a943cbab1243e0fe647c"
+    },
+    {
+      "path": "tests/fail-issue-136.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51e0199413bbfe49a33f804899701f46b982912f",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/51e0199413bbfe49a33f804899701f46b982912f"
+    },
+    {
+      "path": "tests/fail-issue-137.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64b7140f90c3eeb2637a7919aa61b3fe5dfb7276",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/64b7140f90c3eeb2637a7919aa61b3fe5dfb7276"
+    },
+    {
+      "path": "tests/fail-issue-138.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86d2957c74d2f4a045b8b8076cc9ceeba71e5ee9",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/86d2957c74d2f4a045b8b8076cc9ceeba71e5ee9"
+    },
+    {
+      "path": "tests/fail-issue-156.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41e95c6ede5628f75a0a7d601ce259c4161f78f8",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/41e95c6ede5628f75a0a7d601ce259c4161f78f8"
+    },
+    {
+      "path": "tests/fail-issue-163.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7eb472f9d8410386734537ecd376395d5daa4dce",
+      "size": 40384,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7eb472f9d8410386734537ecd376395d5daa4dce"
+    },
+    {
+      "path": "tests/fail-issue-167a.sofa",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "b3b3735d370edae10c1f4cc503a54416bcfba7b4",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/b3b3735d370edae10c1f4cc503a54416bcfba7b4"
+    },
+    {
+      "path": "tests/fail-issue-167b.sofa",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "39b77fadaf34cb1fec80f736e9072513d3420cb5",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/39b77fadaf34cb1fec80f736e9072513d3420cb5"
+    },
+    {
+      "path": "tests/fail-issue-168.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47f22f83f9564f703dafe046e892e39b9fd3544c",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/47f22f83f9564f703dafe046e892e39b9fd3544c"
+    },
+    {
+      "path": "tests/fail-issue-171.sofa",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "acc2bdabb9cf43ff5c1ccbe175be57789d9f837f",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/acc2bdabb9cf43ff5c1ccbe175be57789d9f837f"
+    },
+    {
+      "path": "tests/fail-issue-173.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "430fc47c8ef9bb36d7700956c81615f8ff191871",
+      "size": 40384,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/430fc47c8ef9bb36d7700956c81615f8ff191871"
+    },
+    {
+      "path": "tests/fail-issue-248.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "09569a285a2e813b49aff612142a02fd19a60663",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/09569a285a2e813b49aff612142a02fd19a60663"
+    },
+    {
+      "path": "tests/fail-issue-72.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "92d2f5ad8c2ab77fa3eacff94666268ecaaf2d6d",
+      "size": 3377059,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/92d2f5ad8c2ab77fa3eacff94666268ecaaf2d6d"
+    },
+    {
+      "path": "tests/fail-issue-75.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "662c577426e806354851118d0ac5f3eeeeced780",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/662c577426e806354851118d0ac5f3eeeeced780"
+    },
+    {
+      "path": "tests/fail-issue-76.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "366f27a00d00dbd97c4445d38e29d30fdddcafc8",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/366f27a00d00dbd97c4445d38e29d30fdddcafc8"
+    },
+    {
+      "path": "tests/fail-issue-77.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "154d98aafb462b62fb39d63ffaf308a416c982e2",
+      "size": 3377059,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/154d98aafb462b62fb39d63ffaf308a416c982e2"
+    },
+    {
+      "path": "tests/fail-issue-79.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75b54df3667a66b6af82f5c9402f9a905929f77a",
+      "size": 3377059,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/75b54df3667a66b6af82f5c9402f9a905929f77a"
+    },
+    {
+      "path": "tests/fail-issue-82.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c46275cbe619d13910d15e0de4c3d895f60b3c7",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/5c46275cbe619d13910d15e0de4c3d895f60b3c7"
+    },
+    {
+      "path": "tests/fail-issue-83.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1b99e28d5726527e46e47d9a24eb8e831cbd7e9",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/e1b99e28d5726527e46e47d9a24eb8e831cbd7e9"
+    },
+    {
+      "path": "tests/fail-issue-84.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a7c56cf2f2e624011d9f8cb19fb5e6704ca7094",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/8a7c56cf2f2e624011d9f8cb19fb5e6704ca7094"
+    },
+    {
+      "path": "tests/fail-issue-96.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfee8fbc20a0cd16ae75ccfd2206f042bd9fb5ec",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/cfee8fbc20a0cd16ae75ccfd2206f042bd9fb5ec"
+    },
+    {
+      "path": "tests/hrtf_c_nh898.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78182fdfd985874fea1ba02b1df6aed1ba2f4af0",
+      "size": 6876446,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/78182fdfd985874fea1ba02b1df6aed1ba2f4af0"
+    },
+    {
+      "path": "tests/hrtf_c_nh898.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b45bb3d41ea0c4ff55abe6188769982e5f73b1d",
+      "size": 2951636,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4b45bb3d41ea0c4ff55abe6188769982e5f73b1d"
+    },
+    {
+      "path": "tests/json-diff.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "937ca688437abf36ded0110459baf7562cd401f9",
+      "size": 11647,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/937ca688437abf36ded0110459baf7562cd401f9"
+    },
+    {
+      "path": "tests/json-diffIgnoreNew.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3212bd360e5ad292b12d2e5ffd3c5c529e063807",
+      "size": 11223,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/3212bd360e5ad292b12d2e5ffd3c5c529e063807"
+    },
+    {
+      "path": "tests/latTestAziBeRTA_Resamp1_Fran.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "793616eab05cfa4f4982ff2cd1390243944b11be",
+      "size": 1388266,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/793616eab05cfa4f4982ff2cd1390243944b11be"
+    },
+    {
+      "path": "tests/notcrashed.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "f128ede17eae25c347a2e0441b1f75f4c70df46c",
+      "size": 729,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f128ede17eae25c347a2e0441b1f75f4c70df46c"
+    },
+    {
+      "path": "tests/tester.json.bz2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "202b8a498601564e5980916bf84c36fd7e797b48",
+      "size": 21176,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/202b8a498601564e5980916bf84c36fd7e797b48"
+    },
+    {
+      "path": "tests/tester.m",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "addbef4acedb71eaba67062651b4badb8ea9d874",
+      "size": 769,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/addbef4acedb71eaba67062651b4badb8ea9d874"
+    },
+    {
+      "path": "tests/tester.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f75b10343a0b5e2cb5b3372caede4753095c78e3",
+      "size": 91409,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f75b10343a0b5e2cb5b3372caede4753095c78e3"
+    },
+    {
+      "path": "tests/tester.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3966472700f01e271a3810147178e40b4d3de40",
+      "size": 219,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/a3966472700f01e271a3810147178e40b4d3de40"
+    },
+    {
+      "path": "tests/tester2.m",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "091eacd24da9dbb6298186a1f1a48170bd00daea",
+      "size": 314,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/091eacd24da9dbb6298186a1f1a48170bd00daea"
+    },
+    {
+      "path": "tests/tester2.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5937051b1488deb910dd3610bd07ed82533718de",
+      "size": 104124,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/5937051b1488deb910dd3610bd07ed82533718de"
+    },
+    {
+      "path": "tests/tester2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01d6d998867c28f347c927959dfefc6ea4133ede",
+      "size": 224,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/01d6d998867c28f347c927959dfefc6ea4133ede"
+    },
+    {
+      "path": "tests/testfile.sofa",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50c5d0a17bf116d1f260e16d7dfab81ecbe3ccd0",
+      "size": 37848,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/50c5d0a17bf116d1f260e16d7dfab81ecbe3ccd0"
+    },
+    {
+      "path": "windows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f26a5f69b2a6b73c4539fe3c5b2e48dcbd509134",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/f26a5f69b2a6b73c4539fe3c5b2e48dcbd509134"
+    },
+    {
+      "path": "windows/config.h.sln",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be1e83c3f43d28aa8e4721969719a7c9198d85b8",
+      "size": 207,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/be1e83c3f43d28aa8e4721969719a7c9198d85b8"
+    },
+    {
+      "path": "windows/libmysofa.sln",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ae642ebdd1942783aa5c48989e4dfaca5c517df",
+      "size": 1271,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/2ae642ebdd1942783aa5c48989e4dfaca5c517df"
+    },
+    {
+      "path": "windows/libmysofa.vcxproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9633adbb26ab8834ecd414834ce371b9ebc355c",
+      "size": 9657,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/d9633adbb26ab8834ecd414834ce371b9ebc355c"
+    },
+    {
+      "path": "windows/libmysofa.vcxproj.filters",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0390bcb74dadab109bcf8bda1b7fbbc9d88138e8",
+      "size": 3583,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/0390bcb74dadab109bcf8bda1b7fbbc9d88138e8"
+    },
+    {
+      "path": "windows/testApp",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ba3c6e4e548cdf743bfea95d3e4796d3244223d4",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/ba3c6e4e548cdf743bfea95d3e4796d3244223d4"
+    },
+    {
+      "path": "windows/testApp/stdafx.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1d63e0b438ac89d8285cd7e3dd4ee0890e964d3",
+      "size": 298,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/f1d63e0b438ac89d8285cd7e3dd4ee0890e964d3"
+    },
+    {
+      "path": "windows/testApp/stdafx.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b005a839def24829d348825ce6303a5538707527",
+      "size": 305,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/b005a839def24829d348825ce6303a5538707527"
+    },
+    {
+      "path": "windows/testApp/targetver.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87c0086de751bac3d47208b77d76b82d78f26702",
+      "size": 306,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/87c0086de751bac3d47208b77d76b82d78f26702"
+    },
+    {
+      "path": "windows/testApp/testApp.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bf43125097f88e90ddcb1c657ab67e9fe147dea",
+      "size": 2575,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9bf43125097f88e90ddcb1c657ab67e9fe147dea"
+    },
+    {
+      "path": "windows/testApp/testApp.m",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c11b4543e6a9b16577a2c8ee1c36d6e22b3fb48",
+      "size": 380,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/7c11b4543e6a9b16577a2c8ee1c36d6e22b3fb48"
+    },
+    {
+      "path": "windows/testApp/testApp.sln",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "691ddd4df94abbd2da718aed1c19726dcc775546",
+      "size": 1267,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/691ddd4df94abbd2da718aed1c19726dcc775546"
+    },
+    {
+      "path": "windows/testApp/testApp.vcxproj",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3614d10dfab373bc3528011d164f49af8dd523e",
+      "size": 8805,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/c3614d10dfab373bc3528011d164f49af8dd523e"
+    },
+    {
+      "path": "windows/testApp/testApp.vcxproj.filters",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "908ac783ae875baa776a40fabe57e87d65f53ca5",
+      "size": 1236,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/908ac783ae875baa776a40fabe57e87d65f53ca5"
+    },
+    {
+      "path": "windows/third-party",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "75f1c133d673eca4e25bd57506fee35437421b13",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/75f1c133d673eca4e25bd57506fee35437421b13"
+    },
+    {
+      "path": "windows/third-party/sys",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6706d8149574b50731ba2e4f74a1b54adda58d42",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/6706d8149574b50731ba2e4f74a1b54adda58d42"
+    },
+    {
+      "path": "windows/third-party/sys/LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b6106d283275384161d75624ba3777176851388",
+      "size": 7991,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/8b6106d283275384161d75624ba3777176851388"
+    },
+    {
+      "path": "windows/third-party/sys/time.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9cd9d5a585873faa89ee7ac2fd2c9cc1f4d85021",
+      "size": 416,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/9cd9d5a585873faa89ee7ac2fd2c9cc1f4d85021"
+    },
+    {
+      "path": "windows/third-party/sys/time.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6599d639af84f28bf8f0d965358b84c0eb61184e",
+      "size": 62,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/6599d639af84f28bf8f0d965358b84c0eb61184e"
+    },
+    {
+      "path": "windows/third-party/sys/times.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd3cade647c2c098e318a9436be2ab70af6e9dd5",
+      "size": 920,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/bd3cade647c2c098e318a9436be2ab70af6e9dd5"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6c53a10727a19ba5d95da505eb5a96b1a715a38e",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/6c53a10727a19ba5d95da505eb5a96b1a715a38e"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a72718b480b8fa72c647115ed4c6376f2f4e5aab",
+      "size": 66,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/a72718b480b8fa72c647115ed4c6376f2f4e5aab"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/include",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "22d1af0632ccaf2660d7eb7f0678e014dd2cd854",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/22d1af0632ccaf2660d7eb7f0678e014dd2cd854"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/include/zconf.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4944a4ece53530937adf6eb959e4baafabc7a0b8",
+      "size": 16551,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/4944a4ece53530937adf6eb959e4baafabc7a0b8"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/include/zlib.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d4b932eaf6a0fbb8133b3ab49ba5ef587059fa0",
+      "size": 96829,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/8d4b932eaf6a0fbb8133b3ab49ba5ef587059fa0"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/lib",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "46ff5096f50ac5d501f4bf5efaab56bb540a8f9e",
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/trees/46ff5096f50ac5d501f4bf5efaab56bb540a8f9e"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/lib/zlib.lib",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98ce859d6c59398a2e94efe5959f78a616903eb0",
+      "size": 16638,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/98ce859d6c59398a2e94efe5959f78a616903eb0"
+    },
+    {
+      "path": "windows/third-party/zlib-1.3.1/lib/zlibstatic.lib",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0faab38941c950919a257f7c77d55ddd40f2d50",
+      "size": 192478,
+      "url": "https://api.github.com/repos/hoene/libmysofa/git/blobs/e0faab38941c950919a257f7c77d55ddd40f2d50"
+    }
+  ],
+  "truncated": false
+}

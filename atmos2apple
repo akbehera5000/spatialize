@@ -1,0 +1,548 @@
+#!/bin/zsh
+# atmos2apple: convert a movie with Dolby (TrueHD Atmos, E-AC-3 Atmos, AC-3, ...) audio into a
+# .mov that QuickTime plays with Spatial Audio + head tracking on AirPods.
+#
+# usage: atmos2apple INPUT [OUTPUT.mov] [options]
+#  audio:     --track N              audio track to spatialize (default: best Dolby track)
+#             --bitrate BPS          APAC bitrate (default 1536000)
+#             --height eq|hoa|hoa+eq|off   height enhancement (default eq)
+#             --height-eq DB         overhead-cue boost (default 6)
+#             --height-angle DEG     top speaker elevation for hoa (default 60)
+#             --speakers LAYOUT      place each speaker yourself (ambisonic output): 12 az:el pairs in
+#                                    order L R C LFE Ls Rs Lrs Rrs Ltf Rtf Ltr Rtr, az left-positive
+#             --extra-audio LIST     other audio tracks to keep as AAC, e.g. 0,1 (or all|none)
+#             --objects speakers|direct   direct: Atmos objects go straight into the ambisonic sound
+#                                    field at their exact direction (ambisonic output; TrueHD Atmos)
+#  sound:     --dialogue DB          centre (dialogue) level, e.g. 3
+#             --lfe DB               LFE (bass channel) level
+#             --room off|small|living|cinema[:AMOUNT]   room reflections to take sound out of your head
+#             --night                night mode: quieter loud parts, louder quiet parts
+#             --loudness LUFS|off    normalise the film to this loudness, e.g. -24 (measured first)
+#             --sync MS              move the audio later (+) or earlier (-) than the picture
+#  video:     --video auto|copy|hevc|h264   (auto: copy if this Mac plays it, else HEVC)
+#             --quality 1-100        VideoToolbox quality when converting (default 62)
+#             --max-height PX        downscale when converting, e.g. 1080 (default: keep)
+#             --hdr keep|sdr         keep HDR10 (10-bit) or tone-map to SDR (default keep)
+#             --compat binaural|aac|both|none   a copy of the mix for players without Apple's
+#                                    spatial codec (IINA, VLC): binaural stereo with height for
+#                                    headphones, a 5.1 AAC for speakers, or both (default aac)
+#             --hrtf apple|FILE.sofa head model for the binaural copy (default apple)
+#             --eq G1,...,G10        headphone EQ in dB at 31 62 125 250 500 1k 2k 4k 8k 16k Hz
+#  subtitles: --subs LIST|all|none   text subtitle tracks to keep (default all)
+#             --ocr-subs LIST        picture subtitle tracks (PGS) to read into text with OCR
+#  other:     --start S --duration D convert only that part (scene preview)
+#             --verify on|off        afterwards, measure the finished movie's sync against the source
+#                                    (default on; skipped for scene clips)
+#             --keep-master DIR      keep the decoded Atmos master (or the 7.1.4 mix) in DIR, for
+#                                    the app's live player
+#             --progress             machine-readable progress on stdout (for the app)
+#             --resume on|off        keep finished steps when a run is interrupted and pick them up
+#                                    when the same conversion is started again (default on)
+#             --keep-temp
+set -uo pipefail
+setopt local_options no_monitor
+
+ROOT=${0:A:h}
+BIN=$ROOT/bin
+pick() { for p in "$@"; do [[ -x $p ]] && { print -- $p; return; }; done; print -- ${@[-1]}; }
+TRUEHDD=$(pick $BIN/truehdd $ROOT/vendor/truehdd/target/release/truehdd)
+OPENJOC=$(pick $BIN/openjoc $ROOT/vendor/OpenJOC/target/release/openjoc)
+FFMPEG=$(pick $BIN/ffmpeg ${commands[ffmpeg]:-/usr/local/bin/ffmpeg})
+FFPROBE=$(pick $BIN/ffprobe ${commands[ffprobe]:-/usr/local/bin/ffprobe})
+# Apple order for kAudioChannelLayoutTag_Atmos_7_1_4, from ffmpeg's 7.1.4 channel names
+APPLE_714="pan=12c|c0=FL|c1=FR|c2=FC|c3=LFE|c4=SL|c5=SR|c6=BL|c7=BR|c8=TFL|c9=TFR|c10=TBL|c11=TBR"
+
+PROGRESS=0
+# the arguments that define this conversion (for resuming it), without the run-only flags
+RUNARGS=()
+for a in "$@"; do [[ $a == (--progress|--keep-temp) ]] || RUNARGS+=("$a"); done
+die() { print -u2 "atmos2apple: $*"; (( PROGRESS )) && print "@error $*"; exit 1; }
+stage() { print -u2 "▸ [$1] $2"; (( PROGRESS )) && print "@stage $1 $2"; }
+
+INPUT="" OUTPUT="" TRACK="" BITRATE=1536000 KEEP=0
+HEIGHT=eq HEIGHT_EQ=6 HEIGHT_ANGLE=60 SPEAKERS=""
+VMODE=auto QUALITY=62 MAXH=0 HDR=keep SUBS=all EXTRA=none COMPAT=aac
+HRTF=apple EQ="" RESUME=on VERIFY=on KEEP_MASTER="" OBJECTS=speakers DIALOGUE=0 LFEDB=0 ROOM=off NIGHT=0 LOUDNESS=off SYNC=0 OCRSUBS=none START="" CLIPDUR=""
+while (( $# )); do
+  case $1 in
+    --track) TRACK=$2; shift 2 ;;
+    --bitrate) BITRATE=$2; shift 2 ;;
+    --height) HEIGHT=$2; shift 2 ;;
+    --height-eq) HEIGHT_EQ=$2; shift 2 ;;
+    --height-angle) HEIGHT_ANGLE=$2; shift 2 ;;
+    --speakers) SPEAKERS=$2; shift 2 ;;
+    --extra-audio) EXTRA=$2; shift 2 ;;
+    --video) VMODE=$2; shift 2 ;;
+    --quality) QUALITY=$2; shift 2 ;;
+    --max-height) MAXH=$2; shift 2 ;;
+    --hdr) HDR=$2; shift 2 ;;
+    --subs) SUBS=$2; shift 2 ;;
+    --compat) COMPAT=$2; shift 2 ;;
+    --hrtf) HRTF=$2; shift 2 ;;
+    --eq) EQ=$2; shift 2 ;;
+    --resume) RESUME=$2; shift 2 ;;
+    --objects) OBJECTS=$2; shift 2 ;;
+    --keep-master) KEEP_MASTER=$2; shift 2 ;;
+    --verify) VERIFY=$2; shift 2 ;;
+    --dialogue) DIALOGUE=$2; shift 2 ;;
+    --lfe) LFEDB=$2; shift 2 ;;
+    --room) ROOM=$2; shift 2 ;;
+    --night) NIGHT=1; shift ;;
+    --loudness) LOUDNESS=$2; shift 2 ;;
+    --sync) SYNC=$2; shift 2 ;;
+    --ocr-subs) OCRSUBS=$2; shift 2 ;;
+    --start) START=$2; shift 2 ;;
+    --duration) CLIPDUR=$2; shift 2 ;;
+    --progress) PROGRESS=1; shift ;;
+    --keep-temp) KEEP=1; shift ;;
+    -h|--help) sed -n 2,40p $0 | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -*) die "unknown option $1" ;;
+    *) if [[ -z $INPUT ]]; then INPUT=$1; elif [[ -z $OUTPUT ]]; then OUTPUT=$1; else die "too many arguments"; fi; shift ;;
+  esac
+done
+[[ -n $INPUT && -f $INPUT ]] || die "input file not found (see --help)"
+INPUT=${INPUT:A}
+[[ -n $OUTPUT ]] || OUTPUT=${INPUT:r}.spatial.mov
+OUTPUT=${OUTPUT:A}
+[[ $COMPAT == (aac|binaural|both|none) ]] || die "--compat must be binaural, aac, both or none"
+[[ $COMPAT == (binaural|both) && ! -x $BIN/binaural ]] && { print -u2 "binaural renderer missing; using the 5.1 copy"; COMPAT=aac; }
+for tool in $FFMPEG $FFPROBE $BIN/atmos-render $BIN/spatial-post $BIN/apacenc $BIN/mux; do
+  [[ -x $tool ]] || die "missing $tool (run ./build.sh)"
+done
+
+# Temp files can be tens of GB for a TrueHD movie, so keep them on the output's disk.
+# A full conversion works in a folder named after the input and every option, so running the same
+# conversion again after an interruption finds the steps that already finished ("*.done").
+# Scene clips and the live player's runs are quick and always start fresh.
+[[ -n $START || -n $KEEP_MASTER ]] && RESUME=off
+if [[ $RESUME == on ]]; then
+  KEY=$(print -rn -- "$INPUT|$(stat -f '%z|%m' "$INPUT")|$OUTPUT|${(pj:\0:)RUNARGS}" | md5 -q | cut -c1-16)
+  WORK=${OUTPUT:h}/.atmos2apple.r-$KEY
+  if [[ -f $WORK/pid ]] && kill -0 "$(<$WORK/pid)" 2>/dev/null; then die "this movie is already being converted"; fi
+  mkdir -p "$WORK" || die "cannot write to ${OUTPUT:h}"
+  if [[ ! -f $WORK/resume.info ]]; then
+    { print -r -- "input=$INPUT"; print -r -- "output=$OUTPUT"; print -r -- "started=$(date +%s)"
+      for a in $RUNARGS; do print -r -- "arg=$a"; done } > "$WORK/resume.info"
+  fi
+  # the app looks here on launch for interrupted conversions and leftovers to clean up
+  mkdir -p ~/Library/Caches/atmos2apple && print -r -- "$WORK" >> ~/Library/Caches/atmos2apple/workdirs
+else
+  WORK=$(mktemp -d "${OUTPUT:h}/.atmos2apple.XXXXXX") || die "cannot write to ${OUTPUT:h}"
+fi
+print $$ > "$WORK/pid"
+(( PROGRESS )) && print "@work $WORK"
+done_mark() { [[ $RESUME == on ]] && touch "$WORK/$1.done"; }
+is_done() { [[ $RESUME == on && -f $WORK/$1.done ]]; }
+killtree() { local c; for c in $(pgrep -P $1 2>/dev/null); do killtree $c; kill -TERM $c 2>/dev/null; done; }
+cleanup() {
+  local rc=$?
+  killtree $$
+  rm -f "$WORK/pid"
+  if (( KEEP )); then print -u2 "temp files kept in $WORK"
+  elif [[ $RESUME == on && $rc != 0 && -n $(print -l "$WORK"/*.done(N)) ]]; then
+    print -u2 "finished steps kept for resuming in $WORK"
+  else rm -rf "$WORK"; fi
+}
+trap cleanup EXIT
+trap 'print -u2 "atmos2apple: cancelled"; exit 130' TERM INT
+
+# csv output ends a field list with "," when a stream has side data (HDR, Dolby Vision): strip it
+probe() { $FFPROBE -v error "$@" -of csv=p=0 "$INPUT" 2>/dev/null | head -1 | sed 's/,*$//'; }
+num() { [[ $1 == <->(|.<->) ]] && print -- $1 || print -- ${2:-0}; }
+DUR=$(num "$(probe -show_entries format=duration)" 0)
+# scene preview: every read of the input starts at START and lasts CLIPDUR
+# Decoding reads trim exactly with an input seek. Stream copies would start at the previous
+# keyframe, so they seek near START and then trim precisely as an output option.
+SEEK=() CSEEK_IN=() CSEEK_OUT=()
+if [[ -n $START ]]; then
+  [[ -n $CLIPDUR ]] || CLIPDUR=30
+  SEEK=(-ss $START -t $CLIPDUR)
+  pre=$(( START > 20 ? START - 20 : 0 ))
+  CSEEK_IN=(-ss $pre) CSEEK_OUT=(-ss $(( START - pre )) -t $CLIPDUR)
+  DUR=$CLIPDUR
+fi
+
+# ffmpeg writes key=value progress to fd 3; turn out_time_us into "@progress LANE FRACTION"
+progress_to() {  # LANE [START END]  maps 0..1 of the duration into START..END of the lane
+  local lane=$1 a=${2:-0} b=${3:-1}
+  awk -v d=$DUR -v lane=$lane -v a=$a -v b=$b -v on=$PROGRESS -F= '
+    $1=="out_time_us" && d>0 && on { f=$2/(d*1e6); if(f>1)f=1; if(f<0)f=0; printf "@progress %s %.4f\n", lane, a+(b-a)*f; fflush() }'
+}
+
+# ---------------- audio ----------------
+typeset -a CODECS LANGS
+CODECS=(${(f)"$($FFPROBE -v error -select_streams a -show_entries stream=codec_name -of csv=p=0 "$INPUT" | sed 's/,*$//')"})
+(( ${#CODECS} )) || die "no audio tracks in this file"
+if [[ -z $TRACK ]]; then
+  for want in truehd eac3 ac3; do
+    for i in {1..${#CODECS}}; do
+      if [[ ${CODECS[$i]} == $want ]]; then TRACK=$((i-1)); break 2; fi
+    done
+  done
+  [[ -n $TRACK ]] || TRACK=0
+fi
+CODEC=${CODECS[$((TRACK+1))]:-}
+[[ -n $CODEC ]] || die "audio track $TRACK does not exist (${#CODECS} tracks)"
+ALANG=$($FFPROBE -v error -select_streams a:$TRACK -show_entries stream_tags=language -of csv=p=0 "$INPUT" | head -1 | sed 's/,*$//')
+
+vstart=$(num "$(probe -select_streams v:0 -show_entries stream=start_time)")
+astart=$(num "$(probe -select_streams a:$TRACK -show_entries stream=start_time)")
+DELAY=$(( astart - vstart ))
+# a clip is cut from the same instant for every stream
+[[ -n $START ]] && DELAY=0
+# the user's own correction, in milliseconds (positive: audio later)
+DELAY=$(( DELAY + SYNC / 1000.0 ))
+
+AUDIO=$WORK/audio.caf
+POST=() FORMAT=()
+case $HEIGHT in
+  off) ;;
+  eq) POST=(--height-eq $HEIGHT_EQ) ;;
+  hoa) POST=(--hoa $HEIGHT_ANGLE); FORMAT=(hoa16) ;;
+  hoa+eq) POST=(--height-eq $HEIGHT_EQ --hoa $HEIGHT_ANGLE); FORMAT=(hoa16) ;;
+  *) die "--height must be eq, hoa, hoa+eq or off" ;;
+esac
+# custom speaker positions need the ambisonic output; they replace the --hoa angle
+if [[ -n $SPEAKERS ]]; then
+  POST=()
+  [[ $HEIGHT == (eq|hoa+eq) ]] && POST=(--height-eq $HEIGHT_EQ)
+  POST+=(--layout $SPEAKERS)
+  FORMAT=(hoa16)
+fi
+# ---- mix stage (spatial-post): dialogue/LFE, room, loudness, night mode, limiter ----
+MIX=()
+[[ $ROOM != off ]] && MIX+=(--room $ROOM)
+(( NIGHT )) && MIX+=(--night)
+[[ -n $EQ ]] && MIX+=(--eq $EQ)
+CHANNEL_LEVELS=()
+[[ $DIALOGUE != 0 ]] && CHANNEL_LEVELS+=(--dialogue $DIALOGUE)
+[[ $LFEDB != 0 ]] && CHANNEL_LEVELS+=(--lfe $LFEDB)
+
+# ---- direct object rendering (TrueHD Atmos only): objects → ambisonics at their direction ----
+TOPS=$HEIGHT_ANGLE
+LAYOUT=${SPEAKERS:-"30:0,-30:0,0:0,0:0,90:0,-90:0,150:0,-150:0,45:$TOPS,-45:$TOPS,135:$TOPS,-135:$TOPS"}
+# the binaural copy places the 7.1.4 speakers where the spatial version puts them
+case $HEIGHT in hoa|hoa+eq) BTOP=$HEIGHT_ANGLE ;; *) BTOP=45 ;; esac
+BIN_LAYOUT=${SPEAKERS:-"30:0,-30:0,0:0,0:0,90:0,-90:0,150:0,-150:0,45:$BTOP,-45:$BTOP,135:$BTOP,-135:$BTOP"}
+RENDER_ARGS=()
+direct_setup() {  # switches the encode chain to direct mode
+  RENDER_ARGS=(--direct $LAYOUT $CHANNEL_LEVELS)
+  [[ $HEIGHT == (eq|hoa+eq) ]] && RENDER_ARGS+=(--height-eq $HEIGHT_EQ)
+  CHANNEL_LEVELS=()
+  POST=(--direct-in --layout $LAYOUT)
+  FORMAT=(hoa16)
+}
+
+measure_loudness() {  # sets MIX gain so the film lands on LOUDNESS (integrated, EBU R128)
+  [[ $LOUDNESS == off ]] && return
+  if is_done loudness; then MIX+=(--gain $(<"$WORK/loudness.gain")); return; fi
+  stage audio "Measuring loudness"
+  local I
+  # loudnorm's analysis (ebur128 in this ffmpeg build reports ~35 dB too loud)
+  I=$($FFMPEG -hide_banner -nostdin -nostats $SEEK -i "$INPUT" -map 0:a:$TRACK -af loudnorm=print_format=json -f null - 2>&1 \
+      | sed -nE 's/.*"input_i" *: *"(-?[0-9.]+)".*/\1/p' | tail -1)
+  if [[ $I == -<->(|.<->) ]]; then
+    local g=$(( LOUDNESS - I ))
+    (( g > 15 )) && g=15; (( g < -20 )) && g=-20
+    print -u2 "loudness: measured $I LUFS, target $LOUDNESS, gain $(printf %.1f $g) dB"
+    MIX+=(--gain $(printf %.2f $g))
+    printf %.2f $g > "$WORK/loudness.gain"; done_mark loudness
+  else
+    print -u2 "loudness: could not measure; left as is"
+  fi
+}
+
+COMPAT_FILE=$WORK/compat.m4a      # the spatial track's fallback: binaural, or 5.1 with --compat aac
+SURROUND_FILE=$WORK/surround.m4a  # the 5.1 copy as an extra track with --compat both
+surround_aac() {  # FIFO OUT: the processed 7.1.4 (before the height cue) folded to 5.1 AAC; maxval=1 avoids clipping
+  $FFMPEG -v error -nostdin -f f32le -ar 48000 -ch_layout "FL+FR+FC+LFE+SL+SR+BL+BR+TFL+TFR+TBL+TBR" -i $1 \
+    -af "aresample=ochl=5.1:rematrix_maxval=1" -c:a aac_at -b:a 384k -y "$2"
+}
+binaural_aac() {  # FIFO OUT: the same 7.1.4 rendered for headphones with a head model, stereo AAC
+  $BIN/binaural --hrtf "$HRTF" --layout "$BIN_LAYOUT" < $1 2>>"$WORK/binaural.log" \
+    | $FFMPEG -v error -nostdin -f f32le -ar 48000 -ch_layout stereo -i - -c:a aac_at -b:a 256k -y "$2"
+}
+encode() {  # stdin: renderer output; $1 $2 = audio lane progress range for this step
+  local env=(A2A_DURATION=$DUR A2A_LANE=audio A2A_FROM=${1:-0} A2A_TO=${2:-1} A2A_PROGRESS=$PROGRESS)
+  local post=($CHANNEL_LEVELS $MIX $POST) fifo=$WORK/compat.fifo cpids=() rc p
+  # the limiter catches peaks from any gain, compression or EQ boost; its look-ahead is trimmed, sync is kept
+  local v boost=0; for v in ${(s:,:)EQ}; do (( v > 0 )) && boost=1; done
+  [[ ${post[(I)--gain]} -gt 0 || ${post[(I)--night]} -gt 0 || $boost == 1 ]] && post+=(--limit)
+  if [[ $COMPAT != none ]]; then
+    rm -f $fifo $fifo.51 $fifo.bin; mkfifo $fifo || return 1
+    case $COMPAT in
+      aac) surround_aac $fifo "$COMPAT_FILE" & cpids+=($!) ;;
+      binaural) binaural_aac $fifo "$COMPAT_FILE" & cpids+=($!) ;;
+      both)
+        mkfifo $fifo.51 $fifo.bin || return 1
+        tee $fifo.51 < $fifo > $fifo.bin & cpids+=($!)
+        surround_aac $fifo.51 "$SURROUND_FILE" & cpids+=($!)
+        binaural_aac $fifo.bin "$COMPAT_FILE" & cpids+=($!)
+        ;;
+    esac
+    post+=(--compat-out $fifo)
+  fi
+  if [[ -n $KEEP_MASTER && ! -f $KEEP_MASTER/master.atmos ]]; then
+    # no object master: keep the 7.1.4 mix for the live player instead
+    tee "$KEEP_MASTER/bed714.f32" | $BIN/spatial-post $post | env $env $BIN/apacenc "$AUDIO" 48000 $BITRATE $FORMAT
+  else
+    $BIN/spatial-post $post | env $env $BIN/apacenc "$AUDIO" 48000 $BITRATE $FORMAT
+  fi
+  rc=$?
+  if (( ${#cpids} )); then
+    (( rc )) && for p in $cpids; do killtree $p; kill $p 2>/dev/null; done
+    for p in $cpids; do
+      wait $p || { print -u2 "copy for other players failed; continuing without it"; rm -f "$COMPAT_FILE" "$SURROUND_FILE"; }
+    done
+    rm -f $fifo $fifo.51 $fifo.bin
+  fi
+  return $rc
+}
+watch_decode() {  # FILE FROM TO: audio progress from the size of a growing 24-bit decode
+  (( PROGRESS )) || return 0
+  local f=$1 a=$2 b=$3 ch=0 size
+  while sleep 2; do
+    [[ -f $f ]] || continue
+    (( ch )) || ch=$(num "$($FFPROBE -v error -show_entries stream=channels -of csv=p=0 "$f" 2>/dev/null | head -1)" 0)
+    (( ch )) || continue
+    size=$(stat -f %z "$f" 2>/dev/null) || continue
+    awk -v s=$size -v c=$ch -v d=$DUR -v a=$a -v b=$b \
+      'BEGIN{ if (d<=0) exit; f=s/(c*3*48000*d); if(f>1)f=1; printf "@progress audio %.4f\n", a+(b-a)*f }'
+  done
+}
+check_length() {  # log how the decoded length compares with the movie
+  local s=$(grep -oE '"samples":[0-9]+' $1 | cut -d: -f2)
+  [[ -n $s ]] && awk -v s=$s -v d=$DUR 'BEGIN{ printf "decoded %.3f s of audio for a %.3f s movie\n", s/48000, d }' >&2
+}
+generic() {  # any channel-based audio → 7.1.4 (missing speakers stay silent)
+  stage audio "Decoding ${2:-audio}"
+  # async=1 fills gaps in the track's timestamps with silence so the audio can't drift
+  local seek=(); [[ $1 == $INPUT ]] && seek=($SEEK)
+  $FFMPEG -v error -nostdin $seek -i "$1" -map 0:a:${3:-0} -af "aresample=async=1:ochl=7.1.4:osr=48000,$APPLE_714" \
+    -f f32le - | encode
+}
+
+audio_job() {
+  if is_done audio; then
+    stage audio "Audio finished in the interrupted run"
+    (( PROGRESS )) && print "@progress audio 1"
+    return
+  fi
+  [[ -n $KEEP_MASTER ]] && { mkdir -p "$KEEP_MASTER"; rm -f "$KEEP_MASTER"/master.*(N) "$KEEP_MASTER/bed714.f32"; }
+  measure_loudness
+  case $CODEC in
+    truehd)
+      [[ -x $TRUEHDD ]] || die "truehdd not available"
+      if is_done decode; then
+        stage audio "TrueHD decoded in the interrupted run"
+      else
+      stage audio "Reading the TrueHD Atmos track"
+      # -v fatal: the raw TrueHD muxer warns about repeated timestamps that truehdd doesn't use.
+      # Decode from a file, never a pipe: piped into truehdd while the video encodes, frames were
+      # silently skipped and the audio drifted ahead of the picture (18 s over a 90 min film).
+      $FFMPEG -v fatal -nostdin -nostats -progress pipe:3 $CSEEK_IN -i "$INPUT" -map 0:a:$TRACK $CSEEK_OUT -c copy -f truehd -y "$WORK/a.thd" \
+        3> >(progress_to audio 0 0.08) || die "could not read the TrueHD track"
+      stage audio "Decoding TrueHD Atmos (lossless)"
+      watch_decode "$WORK/thd.atmos.audio" 0.08 0.6 &
+      local watcher=$!
+      $TRUEHDD --loglevel error decode "$WORK/a.thd" --bed-conform --output-path "$WORK/thd" --json > "$WORK/thd.json" \
+        || { kill $watcher 2>/dev/null; die "TrueHD decoding failed"; }
+      kill $watcher 2>/dev/null
+      rm -f "$WORK/a.thd"
+      done_mark decode
+      fi
+      check_length "$WORK/thd.json"
+      if [[ -n $START ]]; then
+        # a cut stream can only be decoded from its first sync point; the frames before it are
+        # missing from the start, so the decoded clip begins that much later than the picture
+        local got=$(grep -oE '"samples":[0-9]+' "$WORK/thd.json" | cut -d: -f2)
+        local lead=$(( CLIPDUR - ${got:-0} / 48000.0 ))
+        (( lead > 0 && lead < 1 )) && DELAY=$(( DELAY + lead )) && print -u2 "clip: audio starts $(printf %.3f $lead) s in"
+      fi
+      if [[ -f $WORK/thd.atmos ]]; then
+        [[ $OBJECTS == direct ]] && direct_setup
+        stage audio "Rendering Atmos objects for Spatial Audio$([[ $OBJECTS == direct ]] && print ' (direct)')"
+        if [[ -n $KEEP_MASTER ]]; then
+          # the live player reads the master; the header names its two companion files
+          mkdir -p "$KEEP_MASTER"; rm -f "$KEEP_MASTER"/master.*(N) "$KEEP_MASTER/bed714.f32"
+          sed -e 's/thd\.atmos\.metadata/master.atmos.metadata/; s/thd\.atmos\.audio/master.atmos.audio/' \
+            "$WORK/thd.atmos" > "$KEEP_MASTER/master.atmos"
+          cp "$WORK/thd.atmos.metadata" "$KEEP_MASTER/master.atmos.metadata"
+        fi
+        $BIN/atmos-render "$WORK/thd.atmos" $RENDER_ARGS 2>>"$WORK/render.log" | encode 0.6 1 || die "rendering failed"
+        if [[ -n $KEEP_MASTER ]]; then mv "$WORK/thd.atmos.audio" "$KEEP_MASTER/master.atmos.audio"
+        else rm -f "$WORK/thd.atmos.audio"; fi
+      else
+        generic "$(print -l $WORK/thd*.caf | head -1)" "TrueHD (no Atmos)"
+      fi
+      ;;
+    eac3)
+      [[ -x $OPENJOC ]] || die "openjoc not available"
+      $FFMPEG -v error -nostdin $CSEEK_IN -i "$INPUT" -map 0:a:$TRACK $CSEEK_OUT -c copy -f eac3 -y "$WORK/a.ec3" || die "could not read the E-AC-3 track"
+      stage audio "Decoding Dolby Digital Plus Atmos objects"
+      if $OPENJOC render-joc "$WORK/a.ec3" --layout 7.1.4 --output "$WORK/joc.wav" --no-progress --overwrite >"$WORK/joc.log" 2>&1; then
+        stage audio "Encoding for Spatial Audio"
+        $FFMPEG -v error -nostdin -i "$WORK/joc.wav" -af "aresample=ochl=7.1.4:osr=48000,$APPLE_714" -f f32le - | encode \
+          || die "encoding failed"
+      else
+        generic "$WORK/a.ec3" "Dolby Digital Plus"
+      fi
+      ;;
+    *)
+      generic "$INPUT" "${CODEC:u}" $TRACK
+      ;;
+  esac
+  [[ -s $AUDIO ]] || die "no audio was produced"
+  done_mark audio
+  print -u2 "audio done"
+}
+
+# ---------------- video, subtitles, extra audio ----------------
+vprobe() { probe -select_streams v:0 -show_entries "$@"; }
+VCODEC=$(vprobe stream=codec_name)
+[[ -n $VCODEC ]] || die "no video track"
+VHEIGHT=$(num "$(vprobe stream=height)")
+VTRC=$(vprobe stream=color_transfer)
+VPRI=$(vprobe stream=color_primaries)
+VSPACE=$(vprobe stream=color_space)
+VPIX=$(vprobe stream=pix_fmt)
+DVPROFILE=$($FFPROBE -v error -select_streams v:0 -show_entries stream_side_data=dv_profile -of csv=p=0 "$INPUT" | grep -oE '[0-9]+' | head -1)
+IS_HDR=0; [[ $VTRC == (smpte2084|arib-std-b67) ]] && IS_HDR=1
+
+if [[ $VMODE == auto ]]; then
+  case $VCODEC in
+    h264|hevc) VMODE=copy ;;
+    av1|vp9) [[ $($BIN/vtcheck $VCODEC 2>/dev/null) == yes ]] && VMODE=copy || VMODE=hevc ;;
+    *) VMODE=hevc ;;
+  esac
+  # copy can't downscale or tone-map
+  [[ $VMODE == copy ]] && (( (MAXH > 0 && VHEIGHT > MAXH) )) && VMODE=hevc
+  [[ $VMODE == copy && $HDR == sdr && $IS_HDR == 1 ]] && VMODE=hevc
+fi
+
+# a clip must start exactly at START, which stream copy can't do (it starts at a keyframe)
+[[ -n $START && $VMODE == copy ]] && VMODE=hevc
+VARGS=()
+case $VMODE in
+  copy)
+    VDESC="Copying ${VCODEC:u} video"
+    VARGS=(-c:v copy)
+    [[ $VCODEC == hevc ]] && VARGS+=(-tag:v hvc1)
+    # Dolby Vision profile 7 (dual-layer Blu-ray) isn't playable on Apple devices; keep its HDR10 base
+    [[ $VCODEC == hevc && $DVPROFILE == 7 ]] && VARGS+=(-bsf:v dovi_rpu=strip=1) && VDESC+=" (Dolby Vision 7 → HDR10)"
+    ;;
+  hevc|h264)
+    FILTERS=()
+    (( MAXH > 0 && VHEIGHT > MAXH )) && FILTERS+=("scale=-2:${MAXH}:flags=lanczos")  # braces: zsh reads "$MAXH:f" as a modifier
+    # the SDR picture mustn't keep the HDR mastering / light-level data, or players treat it as HDR
+    TONEMAP="zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,sidedata=mode=delete:type=MASTERING_DISPLAY_METADATA,sidedata=mode=delete:type=CONTENT_LIGHT_LEVEL"
+    if [[ $VMODE == hevc && $IS_HDR == 1 && $HDR == keep ]]; then
+      FILTERS+=(format=p010le)
+      VARGS=(-c:v hevc_videotoolbox -profile:v main10 -tag:v hvc1
+             -color_primaries ${VPRI:-bt2020} -color_trc $VTRC -colorspace ${VSPACE:-bt2020nc})
+      VDESC="Converting ${VCODEC:u} → HEVC 10-bit HDR"
+    else
+      (( IS_HDR )) && FILTERS+=($TONEMAP)
+      FILTERS+=(format=yuv420p)
+      if [[ $VMODE == hevc ]]; then VARGS=(-c:v hevc_videotoolbox -profile:v main -tag:v hvc1)
+      else VARGS=(-c:v h264_videotoolbox -profile:v high); fi
+      VARGS+=(-color_primaries bt709 -color_trc bt709 -colorspace bt709)
+      VDESC="Converting ${VCODEC:u} → ${VMODE:u}$( (( IS_HDR )) && print ' (HDR → SDR)')"
+    fi
+    VARGS+=(-q:v $QUALITY -vf ${(j:,:)FILTERS})
+    ;;
+  *) die "--video must be auto, copy, hevc or h264" ;;
+esac
+DECODER=()
+[[ $VCODEC == av1 && $VMODE != copy ]] && DECODER=(-c:v libdav1d)
+
+# subtitles: only text formats can become QuickTime (tx3g) subtitles
+typeset -a SCODECS SMAP
+SCODECS=(${(f)"$($FFPROBE -v error -select_streams s -show_entries stream=codec_name -of csv=p=0 "$INPUT" | sed 's/,*$//')"})
+case $SUBS in none) SUBLIST=() ;; all) SUBLIST=({0..$(( ${#SCODECS} - 1 ))}) ;; *) SUBLIST=(${(s:,:)SUBS}) ;; esac
+(( ${#SCODECS} )) || SUBLIST=()
+for s in $SUBLIST; do
+  [[ ${SCODECS[$((s+1))]:-} == (subrip|srt|ass|ssa|webvtt|mov_text|text) ]] && SMAP+=(-map 0:s:$s)
+done
+(( ${#SMAP} )) && SMAP+=(-c:s mov_text)
+
+# extra audio tracks → AAC (stereo or 5.1), switchable in QuickTime's Languages menu
+AMAP=()
+case $EXTRA in none) EXLIST=() ;; all) EXLIST=({0..$(( ${#CODECS} - 1 ))}) ;; *) EXLIST=(${(s:,:)EXTRA}) ;; esac
+k=0
+for a in $EXLIST; do
+  [[ $a == $TRACK || -z ${CODECS[$((a+1))]:-} ]] && continue
+  ch=$(num "$($FFPROBE -v error -select_streams a:$a -show_entries stream=channels -of csv=p=0 "$INPUT" | head -1 | sed 's/,*$//')" 2)
+  (( ch > 6 )) && ch=6; (( ch == 1 )) && ch=2
+  AMAP+=(-map 0:a:$a -c:a:$k aac_at -ac:a:$k $ch -b:a:$k $(( ch > 2 ? 448 : 192 ))k)
+  k=$((k+1))
+done
+
+# picture subtitles (PGS) → text with OCR, then into their own small movie for the muxer
+OCRLIST=()
+case $OCRSUBS in none) ;; all) for i in {1..${#SCODECS}}; do [[ ${SCODECS[$i]} == hdmv_pgs_subtitle ]] && OCRLIST+=($((i-1))); done ;; *) OCRLIST=(${(s:,:)OCRSUBS}) ;; esac
+OCR_FILE=$WORK/ocr.mov
+ocr_job() {
+  local s lang inputs=() maps=() meta=() n=0
+  if is_done ocr; then stage subs "Subtitles read in the interrupted run"; return 0; fi
+  for s in $OCRLIST; do
+    [[ ${SCODECS[$((s+1))]:-} == hdmv_pgs_subtitle ]] || continue
+    lang=$($FFPROBE -v error -select_streams s:$s -show_entries stream_tags=language -of csv=p=0 "$INPUT" | head -1 | sed 's/,*$//')
+    stage subs "Reading ${lang:-und} subtitles (OCR)"
+    $FFMPEG -v error -nostdin $CSEEK_IN -i "$INPUT" -map 0:s:$s $CSEEK_OUT -c copy -f sup -y "$WORK/s$s.sup" || continue
+    $BIN/pgs2srt "$WORK/s$s.sup" "${lang:-und}" > "$WORK/s$s.srt" 2>>"$WORK/ocr.log" || continue
+    [[ -s $WORK/s$s.srt ]] || continue
+    inputs+=(-i "$WORK/s$s.srt"); maps+=(-map $n:0); meta+=(-metadata:s:s:$n language=${lang:-und}); n=$((n+1))
+  done
+  (( n )) || return 0
+  $FFMPEG -v error -nostdin $inputs $maps $meta -c:s mov_text -f mov -y "$OCR_FILE" || rm -f "$OCR_FILE"
+  done_mark ocr
+  print -u2 "ocr done: $n track(s)"
+}
+
+video_job() {
+  if is_done video; then
+    stage video "Video finished in the interrupted run"
+    (( PROGRESS )) && print "@progress video 1"
+    return
+  fi
+  stage video "$VDESC"
+  $FFMPEG -v error -nostdin -nostats -progress pipe:3 $DECODER $SEEK -i "$INPUT" -map 0:v:0 $VARGS $AMAP $SMAP \
+    -dn -map_chapters $([[ -n $START ]] && print -- -1 || print 0) ${START:+-t} ${START:+$CLIPDUR} -f mp4 -y "$WORK/video.mp4" 3> >(progress_to video) \
+    || die "video ${VMODE} failed"
+  done_mark video
+  print -u2 "video done"
+}
+
+# ---------------- run audio and video side by side ----------------
+print -u2 "audio: track $TRACK ($CODEC) · video: $VCODEC ${VHEIGHT}p → $VMODE · subs: ${#SMAP} · extra audio: $k"
+(( PROGRESS )) && print "@plan audio=$CODEC video=$VMODE vcodec=$VCODEC subs=$(( ${#SMAP} ? ${#SMAP}/2 - 1 : 0 )) extra=$k"
+video_job &
+VPID=$!
+OPID=0
+(( ${#OCRLIST} )) && { ocr_job & OPID=$!; }
+audio_job
+wait $VPID || die "video step failed"
+(( OPID )) && wait $OPID
+
+stage mux "Writing $(basename "$OUTPUT")"
+MUXCOMPAT=()
+if [[ -s $COMPAT_FILE ]]; then
+  MUXCOMPAT=(--compat "$COMPAT_FILE" --compat-kind $([[ $COMPAT == aac ]] && print surround || print binaural))
+fi
+[[ -s $SURROUND_FILE ]] && MUXCOMPAT+=(--surround "$SURROUND_FILE")
+[[ -s $OCR_FILE ]] && MUXCOMPAT+=(--extra "$OCR_FILE")
+$BIN/mux --video "$WORK/video.mp4" --audio "$AUDIO" $MUXCOMPAT --out "$OUTPUT" --delay $DELAY --lang "${ALANG:-und}" \
+  || die "could not write the output movie"
+# measure the result against the source: steady offsets and drift both show up here
+if [[ $VERIFY == on && -z $START && -x $BIN/synccheck ]]; then
+  stage verify "Checking audio sync"
+  $BIN/synccheck "$OUTPUT" "$INPUT" --track $TRACK --expect $SYNC --ffmpeg "$FFMPEG" 2>>"$WORK/sync.log" \
+    | while read -r line; do
+        print -u2 "$line"
+        (( PROGRESS )) && print -- "$line"
+      done
+  cat "$WORK/sync.log" >&2
+fi
+stage mux "Done"
+(( PROGRESS )) && print "@done $OUTPUT" || print -- "$OUTPUT"
